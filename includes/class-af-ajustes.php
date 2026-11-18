@@ -51,9 +51,7 @@ class AF_Ajustes {
             'api_key'            => '',
             'cache_minutos'      => 60,
             'espacios_page_id'   => 0,
-            'espacios_titulo'    => 'Espacios de aula',
             'espacios_intro'     => 'Busca el curso de tu hijo o hija y pulsa **Abrir en Google Chat**. Entra con la cuenta del colegio con la que se te ha añadido al espacio.',
-            'espacios_tribanda'  => 'yes',
             'espacios_tutor'     => 'yes',
             'espacios_foto'      => 'yes',
             'espacios_anteriores'=> 'yes',
@@ -78,7 +76,10 @@ class AF_Ajustes {
 
     public static function update($values) {
         $s = get_option(self::OPTION, array());
-        update_option(self::OPTION, array_merge(is_array($s) ? $s : array(), $values));
+        $s = array_merge(is_array($s) ? $s : array(), $values);
+        // Options that no longer exist (the spaces page now uses the website's header).
+        unset($s['espacios_titulo'], $s['espacios_tribanda']);
+        update_option(self::OPTION, $s);
     }
 
     public static function flash($text, $type = 'success') {

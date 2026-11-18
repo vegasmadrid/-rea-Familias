@@ -35,14 +35,10 @@ if (!defined('ABSPATH')) {
                     <?php if ($page_id) : ?>
                         <a href="<?php echo esc_url(get_permalink($page_id)); ?>" target="_blank" rel="noopener"><?php esc_html_e('Ver página', 'area-familias'); ?></a>
                     <?php endif; ?>
-                    <span class="description"><?php esc_html_e('Su contenido se genera solo (no hace falta shortcode).', 'area-familias'); ?></span>
+                    <span class="description"><?php esc_html_e('Su contenido se genera solo (no hace falta shortcode). La cabecera y el título son los de la propia página y el tema de la web.', 'area-familias'); ?></span>
                 </p>
                 <p>
                     <label><input type="checkbox" name="espacios_publica" value="1" <?php checked($es_publica); ?>> <strong><?php esc_html_e('Página pública', 'area-familias'); ?></strong> — <?php esc_html_e('se puede ver sin iniciar sesión (misma opción que Ajustes › Páginas públicas). Si no, solo la ven las familias con sesión iniciada.', 'area-familias'); ?></label>
-                </p>
-                <p>
-                    <label for="espacios_titulo"><strong><?php esc_html_e('Título', 'area-familias'); ?></strong></label><br>
-                    <input type="text" name="espacios_titulo" id="espacios_titulo" class="widefat" value="<?php echo esc_attr($s['espacios_titulo']); ?>">
                 </p>
                 <p>
                     <label for="espacios_intro"><strong><?php esc_html_e('Texto de introducción', 'area-familias'); ?></strong></label><br>
@@ -50,7 +46,6 @@ if (!defined('ABSPATH')) {
                     <span class="description"><?php esc_html_e('Puedes usar **texto** para la negrita.', 'area-familias'); ?></span>
                 </p>
                 <fieldset class="af-options">
-                    <label><input type="checkbox" name="espacios_tribanda" value="1" <?php checked($s['espacios_tribanda'], 'yes'); ?>> <?php esc_html_e('Mostrar la tribanda corporativa', 'area-familias'); ?></label>
                     <label><input type="checkbox" name="espacios_tutor" value="1" id="af-tutor" <?php checked($s['espacios_tutor'], 'yes'); ?>> <?php esc_html_e('Mostrar el nombre del tutor/a de cada curso', 'area-familias'); ?></label>
                     <label class="af-sub"><input type="checkbox" name="espacios_foto" value="1" id="af-foto" <?php checked($s['espacios_foto'], 'yes'); ?>> <?php esc_html_e('…con su foto (o sus iniciales)', 'area-familias'); ?></label>
                     <label><input type="checkbox" name="espacios_anteriores" value="1" <?php checked($s['espacios_anteriores'], 'yes'); ?>> <?php esc_html_e('Mostrar las promociones anteriores al final', 'area-familias'); ?></label>

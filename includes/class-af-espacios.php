@@ -149,9 +149,7 @@ class AF_Espacios {
             'profesores_url'      => isset($_POST['profesores_url']) ? esc_url_raw(trim(wp_unslash($_POST['profesores_url'])), array('https', 'http')) : '',
             'cache_minutos'       => isset($_POST['cache_minutos']) ? max(5, min(1440, absint($_POST['cache_minutos']))) : 60,
             'espacios_page_id'    => $page_id,
-            'espacios_titulo'     => isset($_POST['espacios_titulo']) ? sanitize_text_field(wp_unslash($_POST['espacios_titulo'])) : '',
             'espacios_intro'      => isset($_POST['espacios_intro']) ? sanitize_textarea_field(wp_unslash($_POST['espacios_intro'])) : '',
-            'espacios_tribanda'   => $yes('espacios_tribanda'),
             'espacios_tutor'      => $yes('espacios_tutor'),
             'espacios_foto'       => $yes('espacios_foto'),
             'espacios_anteriores' => $yes('espacios_anteriores'),
@@ -225,11 +223,8 @@ class AF_Espacios {
             $grupos[] = $g;
         }
         $anteriores = ($data && $s['espacios_anteriores'] === 'yes') ? (array) $data['anteriores'] : array();
-        $titulo = $s['espacios_titulo'] !== '' ? $s['espacios_titulo'] : __('Espacios de aula', 'area-familias');
         $intro = preg_replace('/\*\*(.+?)\*\*/s', '<strong>$1</strong>', esc_html($s['espacios_intro']));
         $mostrar_ayuda = $s['espacios_ayuda'] === 'yes';
-        $logo_url = $s['logo_url'];
-        $tribanda_url = $s['espacios_tribanda'] === 'yes' ? $s['tribanda_url'] : '';
         $sin_conexion = $data === null;
 
         ob_start();

@@ -4,8 +4,11 @@
  * Self-contained styles with the look of the school's website (same design as
  * the families page of the Área de Profesores).
  *
- * Variables: $grupos (list of {key,label,espacios}), $anteriores, $titulo, $intro (HTML),
- *            $mostrar_ayuda, $logo_url, $tribanda_url, $mostrar_tutor, $mostrar_foto, $sin_conexion
+ * The page uses the website's own header (theme / Elementor): this template only
+ * outputs the content (introduction, search, courses and previous promotions).
+ *
+ * Variables: $grupos (list of {key,label,espacios}), $anteriores, $intro (HTML),
+ *            $mostrar_ayuda, $mostrar_tutor, $mostrar_foto, $sin_conexion
  */
 
 if (!defined('ABSPATH')) {
@@ -32,87 +35,12 @@ $apdf_icono_chat = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden=
     color: var(--apdf-ink);
     max-width: 1100px;
     margin: 0 auto;
-    padding: 0 0 40px;
+    padding: 8px 0 40px;
     box-sizing: border-box;
     line-height: 1.5;
     text-align: left;
 }
 .apdf *, .apdf *::before, .apdf *::after { box-sizing: border-box; }
-/* Header and tribanda across the full width of the window, like the school's website */
-html:has(.apdf), body:has(.apdf) { overflow-x: clip; }
-.apdf .apdf-bleed {
-    position: relative;
-    width: 100vw;
-    max-width: 100vw;
-    left: 50%;
-    margin-left: -50vw;
-}
-.apdf .apdf-header {
-    background: #fff;
-    box-shadow: 0 1px 0 rgba(49, 50, 128, .06);
-}
-.apdf .apdf-hero {
-    /* Logo on the left, texts centered on the page (the 3rd column balances the logo) */
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    gap: 20px;
-    /* Like the school's website: the logo sits at the left edge of the window,
-       not inside the content margins. */
-    max-width: none;
-    margin: 0;
-    padding: 10px 12px;
-}
-.apdf .apdf-hero > .apdf-logo { justify-self: start; }
-.apdf .apdf-logo {
-    display: block;
-    width: auto;
-    height: auto;
-    max-width: 170px;
-    max-height: 100px;
-    object-fit: contain;
-    flex-shrink: 0;
-    margin: 0;
-    border: 0;
-    box-shadow: none;
-}
-.apdf .apdf-hero-text { min-width: 0; text-align: center; grid-column: 2; }
-.apdf .apdf-kicker {
-    margin: 0 0 2px;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--apdf-orange);
-}
-.apdf .apdf-title {
-    margin: 0;
-    padding: 0;
-    font-family: inherit;
-    font-size: clamp(26px, 4.4vw, 42px);
-    line-height: 1.1;
-    font-weight: 800;
-    letter-spacing: .01em;
-    text-transform: uppercase;
-    color: var(--apdf-sky);
-    border: 0;
-}
-.apdf .apdf-tribanda {
-    display: block;
-    line-height: 0;
-    margin-bottom: 26px;
-    overflow: hidden;
-}
-.apdf .apdf-tribanda img {
-    display: block;
-    width: 100%;
-    max-width: none;
-    height: 36px;
-    object-fit: fill;
-    transform: rotate(180deg);
-    margin: 0;
-    border: 0;
-}
 .apdf .apdf-intro {
     margin: 0 0 18px;
     font-size: 16px;
@@ -335,43 +263,18 @@ html:has(.apdf), body:has(.apdf) { overflow-x: clip; }
 }
 .apdf .apdf-ayuda strong { color: var(--apdf-navy); }
 @media (max-width: 600px) {
-    .apdf .apdf-hero { grid-template-columns: auto 1fr; gap: 12px; padding: 8px 10px; }
-    .apdf .apdf-tribanda img { height: 24px; }
-    .apdf .apdf-logo { max-width: 92px; max-height: 64px; }
-    .apdf .apdf-kicker { font-size: 11px; }
-    .apdf .apdf-tribanda { margin-bottom: 18px; }
     .apdf .apdf-intro { font-size: 15px; }
     .apdf .apdf-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
     .apdf a.apdf-card { padding: 12px 12px 12px; border-radius: 12px; }
     .apdf .apdf-curso { font-size: 18px; }
     .apdf .apdf-btn { font-size: 12px; padding: 8px 6px; white-space: normal; text-align: center; }
-    .apdf .apdf-title { font-size: 26px; }
     .apdf .apdf-promo { font-size: 10.5px; letter-spacing: .02em; }
-    .apdf .apdf-kicker { letter-spacing: .08em; }
     .apdf .apdf-btn svg { display: none; }
     .apdf .apdf-grupo-title { font-size: 18px; }
 }
 </style>
 
 <div class="apdf">
-    <div class="apdf-bleed apdf-header">
-        <header class="apdf-hero">
-            <?php if (!empty($logo_url)) : ?>
-                <img class="apdf-logo" src="<?php echo esc_url($logo_url); ?>" alt="<?php esc_attr_e('Colegio Casa de la Virgen', 'area-familias'); ?>">
-            <?php endif; ?>
-            <div class="apdf-hero-text">
-                <p class="apdf-kicker"><?php esc_html_e('Colegio Casa de la Virgen · Área de Familias', 'area-familias'); ?></p>
-                <h2 class="apdf-title"><?php echo esc_html($titulo); ?></h2>
-            </div>
-        </header>
-    </div>
-
-    <?php if (!empty($tribanda_url)) : ?>
-        <div class="apdf-bleed apdf-tribanda" aria-hidden="true"><img src="<?php echo esc_url($tribanda_url); ?>" alt=""></div>
-    <?php else : ?>
-        <div style="height:22px"></div>
-    <?php endif; ?>
-
     <?php if (empty($grupos) && empty($anteriores)) : ?>
         <p class="apdf-vacio">
             <?php echo $sin_conexion

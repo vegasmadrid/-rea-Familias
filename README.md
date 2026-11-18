@@ -19,8 +19,8 @@ Plugin de WordPress para el Área de Familias del Colegio Casa de la Virgen (`fa
 ### Área Familias › Espacios de aula
 - Se elige la **página** donde se muestran los espacios de Google Chat de cada aula (se puede marcar como pública).
 - Los datos se **leen del Área de Profesores** (cursos, tutores con foto, promociones anteriores), así que siempre están actualizados. Se guardan en caché (60 minutos por defecto) y, si el Área de Profesores no responde, se muestra la última copia recibida.
-- Opciones: título, introducción, tribanda, tutor/a y su foto, promociones anteriores, otros espacios y recuadro de ayuda.
-- Mismo diseño que la página de familias del Área de Profesores (estética de la web del colegio).
+- Usa la cabecera y el título de la propia web (tema / Elementor); el plugin solo genera el contenido: introducción, buscador, cursos por etapa y promociones anteriores, con la estética de la web del colegio.
+- Opciones: introducción, tutor/a y su foto, promociones anteriores, otros espacios y recuadro de ayuda.
 
 ## Instalación
 

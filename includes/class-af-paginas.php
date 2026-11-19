@@ -34,6 +34,10 @@ class AF_Paginas {
         if ($espacios && !isset($map[$espacios])) {
             $map[$espacios] = array('AF_Espacios', 'render_pagina');
         }
+        $inicio = absint(AF_Ajustes::get('start_page_id'));
+        if ($inicio && !isset($map[$inicio])) {
+            $map[$inicio] = array('AF_Panel', 'render');
+        }
         return $map;
     }
 

@@ -22,6 +22,13 @@ Plugin de WordPress para el Área de Familias del Colegio Casa de la Virgen (`fa
 - Usa la cabecera y el título de la propia web (tema / Elementor); el plugin solo genera el contenido: introducción, buscador, cursos por etapa y promociones anteriores, con la estética de la web del colegio.
 - Opciones: introducción, tutor/a y su foto, promociones anteriores, otros espacios y recuadro de ayuda.
 
+### Página de inicio de las familias (Área Familias › Panel de familias)
+- En la **Página de inicio** (Ajustes) se muestra el panel de la familia: saludo ("Hola, …") y sus opciones:
+  - **Mis hijos**: curso, etapa, tutor/a (con foto) y botón a su espacio de aula.
+  - **Mis datos**: dirección de cada padre/madre y **teléfono de emergencia**, editables. Al cambiarlos, el Área de Profesores avisa por correo al tutor/a y a Secretaría.
+  - **Reservar un servicio** (muy pronto), **Enlaces de interés** (configurables) y acceso a **Espacios de aula**.
+- Los datos de alumnos y familias viven en el Área de Profesores; aquí solo se piden los de la familia que ha iniciado sesión (por su correo).
+
 ## Instalación
 
 1. Sube la carpeta del plugin a `wp-content/plugins/area-familias` y actívalo.

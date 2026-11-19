@@ -57,6 +57,10 @@ class AF_Ajustes {
             'espacios_anteriores'=> 'yes',
             'espacios_otros'     => 'yes',
             'espacios_ayuda'     => 'yes',
+            // Panel de la familia (página de inicio)
+            'panel_saludo'       => 'Bienvenida al Área de Familias del Colegio Casa de la Virgen.',
+            'panel_enlaces'      => '',
+            'panel_servicios'    => AF_Panel::servicios_por_defecto(),
         );
     }
 

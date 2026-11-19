@@ -5,8 +5,9 @@
  * Shown on the "Página de inicio" chosen in Área Familias › Ajustes: a greeting
  * and the options of the family:
  * - Mis hijos: course, tutor/a and class space of each child.
- * - Mis datos: address of each parent and emergency phone (editable; the tutor/a
- *   and Secretaría are notified by the Área de Profesores).
+ * - Mis datos: emergency phone and address of each parent (editable; saved right
+ *   away in the Área de Profesores, which notifies the tutor/a and Secretaría).
+ * - Espacios de aula: Google Chat spaces of every class.
  * - Reservar un servicio (coming soon) and Enlaces de interés.
  *
  * The data lives in the Área de Profesores and is read through its API with the
@@ -110,11 +111,15 @@ class AF_Panel {
         foreach ((array) (isset($_POST['direccion']) ? wp_unslash($_POST['direccion']) : array()) as $cid => $dir) {
             $dirs[(string) absint($cid)] = sanitize_text_field($dir);
         }
+        $tels = array();
+        foreach ((array) (isset($_POST['telefono']) ? wp_unslash($_POST['telefono']) : array()) as $cid => $tel) {
+            $tels[(string) absint($cid)] = sanitize_text_field($tel);
+        }
 
         $r = self::api('POST', '/familia/datos', array(
             'email'       => $user->user_email,
             'familia_id'  => isset($_POST['familia_id']) ? absint($_POST['familia_id']) : 0,
-            'telefono'    => isset($_POST['telefono']) ? sanitize_text_field(wp_unslash($_POST['telefono'])) : '',
+            'telefonos'   => $tels,
             'direcciones' => $dirs,
         ));
 
@@ -158,7 +163,8 @@ class AF_Panel {
                 $enlaces[] = array('titulo' => $p[0], 'url' => $p[1], 'desc' => isset($p[2]) ? $p[2] : '');
             }
         }
-        $espacios_url = absint($s['espacios_page_id']) ? get_permalink(absint($s['espacios_page_id'])) : '';
+        // Espacios de aula, as one more option of the panel.
+        $espacios_html = AF_Espacios::render_pagina();
         $logout_url = AF_Acceso::get_logout_url();
 
         ob_start();

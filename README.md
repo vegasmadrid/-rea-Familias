@@ -17,16 +17,15 @@ Plugin de WordPress para el Área de Familias del Colegio Casa de la Virgen (`fa
 - Textos de la pantalla de acceso, logotipo y tribanda.
 
 ### Área Familias › Espacios de aula
-- Se elige la **página** donde se muestran los espacios de Google Chat de cada aula (se puede marcar como pública).
+- Los espacios de Google Chat de cada aula se muestran como la opción **Espacios de aula** del panel de la familia (ya no es una página aparte).
 - Los datos se **leen del Área de Profesores** (cursos, tutores con foto, promociones anteriores), así que siempre están actualizados. Se guardan en caché (60 minutos por defecto) y, si el Área de Profesores no responde, se muestra la última copia recibida.
-- Usa la cabecera y el título de la propia web (tema / Elementor); el plugin solo genera el contenido: introducción, buscador, cursos por etapa y promociones anteriores, con la estética de la web del colegio.
 - Opciones: introducción, tutor/a y su foto, promociones anteriores, otros espacios y recuadro de ayuda.
 
 ### Página de inicio de las familias (Área Familias › Panel de familias)
 - En la **Página de inicio** (Ajustes) se muestra el panel de la familia: saludo ("Hola, …") y sus opciones:
   - **Mis hijos**: curso, etapa, tutor/a (con foto) y botón a su espacio de aula.
-  - **Mis datos**: dirección de cada padre/madre y **teléfono de emergencia**, editables. Al cambiarlos, el Área de Profesores avisa por correo al tutor/a y a Secretaría.
-  - **Reservar un servicio** (muy pronto), **Enlaces de interés** (configurables) y acceso a **Espacios de aula**.
+  - **Mis datos**: **teléfono de emergencia y dirección de cada padre/madre**, editables. Se guardan al momento en el Área de Profesores, que avisa por correo al tutor/a y a Secretaría.
+  - **Espacios de aula**, **Reservar un servicio** (muy pronto) y **Enlaces de interés** (configurables).
 - Los datos de alumnos y familias viven en el Área de Profesores; aquí solo se piden los de la familia que ha iniciado sesión (por su correo).
 
 ## Instalación
@@ -35,7 +34,7 @@ Plugin de WordPress para el Área de Familias del Colegio Casa de la Virgen (`fa
 2. Necesita **Nextend Social Login** con el proveedor de Google configurado (igual que el Área de Profesores).
 3. En **Área Familias › Ajustes** elige la página de login y la de inicio.
 4. En el **Área de Profesores** (versión 1.6.0 o posterior): *Área Profesores › Espacios de Chat › Conexión con el Área Familias* › **Activar y generar clave**.
-5. En **Área Familias › Espacios de aula** pega la dirección del Área de Profesores y la clave, elige la página y pulsa **Guardar y comprobar la conexión**.
+5. En **Área Familias › Espacios de aula** pega la dirección del Área de Profesores y la clave y pulsa **Guardar y comprobar la conexión**.
 
 ## Conexión con el Área de Profesores
 

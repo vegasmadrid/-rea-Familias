@@ -4,7 +4,7 @@
  *
  * Reads the families' Google Chat spaces from the Área de Profesores
  * (profesores.casadelavirgen.es) through its API, keeps a cached copy and shows
- * them on the page chosen in "Área Familias > Espacios de aula".
+ * them in the "Espacios de aula" option of the family panel (home page).
  *
  * If the Área de Profesores cannot be reached, the last copy received is shown.
  */
@@ -126,10 +126,7 @@ class AF_Espacios {
         }
         $s = AF_Ajustes::all();
         $flash = AF_Ajustes::get_flash();
-        $pages = get_pages(array('sort_column' => 'post_title'));
         $ultima = get_option(self::ULTIMA);
-        $page_id = absint($s['espacios_page_id']);
-        $es_publica = $page_id && in_array($page_id, AF_Acceso::get_public_page_ids(), true);
         include AREA_FAMILIAS_DIR . 'templates/admin-espacios.php';
     }
 
@@ -143,12 +140,10 @@ class AF_Espacios {
             return !empty($_POST[$k]) ? 'yes' : 'no';
         };
         $key = isset($_POST['api_key']) ? sanitize_text_field(wp_unslash($_POST['api_key'])) : '';
-        $page_id = isset($_POST['espacios_page_id']) ? absint($_POST['espacios_page_id']) : 0;
 
         $values = array(
             'profesores_url'      => isset($_POST['profesores_url']) ? esc_url_raw(trim(wp_unslash($_POST['profesores_url'])), array('https', 'http')) : '',
             'cache_minutos'       => isset($_POST['cache_minutos']) ? max(5, min(1440, absint($_POST['cache_minutos']))) : 60,
-            'espacios_page_id'    => $page_id,
             'espacios_intro'      => isset($_POST['espacios_intro']) ? sanitize_textarea_field(wp_unslash($_POST['espacios_intro'])) : '',
             'espacios_tutor'      => $yes('espacios_tutor'),
             'espacios_foto'       => $yes('espacios_foto'),
@@ -159,13 +154,6 @@ class AF_Espacios {
         if ($key !== '') {
             $values['api_key'] = $key; // Empty field = keep the saved key.
         }
-
-        // Public page: same list as Ajustes › Páginas públicas.
-        $public = array_values(array_diff(array_map('absint', (array) AF_Ajustes::get('public_page_ids')), array($page_id)));
-        if ($page_id && !empty($_POST['espacios_publica'])) {
-            $public[] = $page_id;
-        }
-        $values['public_page_ids'] = $public;
 
         AF_Ajustes::update($values);
         delete_transient(self::CACHE);

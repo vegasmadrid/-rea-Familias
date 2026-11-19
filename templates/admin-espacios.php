@@ -2,7 +2,7 @@
 /**
  * Admin: Área Familias › Espacios de aula
  *
- * Variables: $s, $flash, $pages, $ultima, $page_id, $es_publica
+ * Variables: $s, $flash, $ultima
  */
 
 if (!defined('ABSPATH')) {
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 ?>
 <div class="wrap af-wrap">
     <h1 class="af-title"><span class="af-badge"><?php esc_html_e('Área Familias', 'area-familias'); ?></span> <?php esc_html_e('Espacios de aula', 'area-familias'); ?></h1>
-    <p class="af-lead"><?php esc_html_e('Muestra en una página de esta web los espacios de Google Chat de cada aula. Los datos se leen del Área de Profesores, así que siempre están actualizados (cursos, tutores y promociones).', 'area-familias'); ?></p>
+    <p class="af-lead"><?php esc_html_e('Espacios de Google Chat de cada aula, como opción "Espacios de aula" del panel de las familias. Los datos se leen del Área de Profesores, así que siempre están actualizados (cursos, tutores y promociones).', 'area-familias'); ?></p>
 
     <?php if ($flash) : ?>
         <div class="notice notice-<?php echo esc_attr($flash['type']); ?> is-dismissible"><p><?php echo esc_html($flash['text']); ?></p></div>
@@ -23,23 +23,8 @@ if (!defined('ABSPATH')) {
 
         <div class="af-columns">
             <div class="af-card">
-                <h2><span class="dashicons dashicons-admin-page"></span> <?php esc_html_e('Página', 'area-familias'); ?></h2>
-                <p>
-                    <label for="espacios_page_id"><strong><?php esc_html_e('Página donde se muestran los espacios de aula', 'area-familias'); ?></strong></label><br>
-                    <select name="espacios_page_id" id="espacios_page_id" class="widefat">
-                        <option value="0"><?php esc_html_e('— Ninguna —', 'area-familias'); ?></option>
-                        <?php foreach ($pages as $p) : ?>
-                            <option value="<?php echo esc_attr($p->ID); ?>" <?php selected($page_id, (int) $p->ID); ?>><?php echo esc_html($p->post_title); ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <?php if ($page_id) : ?>
-                        <a href="<?php echo esc_url(get_permalink($page_id)); ?>" target="_blank" rel="noopener"><?php esc_html_e('Ver página', 'area-familias'); ?></a>
-                    <?php endif; ?>
-                    <span class="description"><?php esc_html_e('Su contenido se genera solo (no hace falta shortcode). La cabecera y el título son los de la propia página y el tema de la web.', 'area-familias'); ?></span>
-                </p>
-                <p>
-                    <label><input type="checkbox" name="espacios_publica" value="1" <?php checked($es_publica); ?>> <strong><?php esc_html_e('Página pública', 'area-familias'); ?></strong> — <?php esc_html_e('se puede ver sin iniciar sesión (misma opción que Ajustes › Páginas públicas). Si no, solo la ven las familias con sesión iniciada.', 'area-familias'); ?></label>
-                </p>
+                <h2><span class="dashicons dashicons-admin-page"></span> <?php esc_html_e('Cómo se muestran', 'area-familias'); ?></h2>
+                <p class="description" style="margin-top:0;"><?php esc_html_e('Los espacios de aula aparecen como una opción más del panel de la familia (su página de inicio).', 'area-familias'); ?></p>
                 <p>
                     <label for="espacios_intro"><strong><?php esc_html_e('Texto de introducción', 'area-familias'); ?></strong></label><br>
                     <textarea name="espacios_intro" id="espacios_intro" class="widefat" rows="3"><?php echo esc_textarea($s['espacios_intro']); ?></textarea>

@@ -3,7 +3,7 @@
  * Panel de la familia (página de inicio del Área Familias).
  *
  * Variables: $user, $s, $familia (array|WP_Error), $msg, $nombre, $servicios,
- *            $enlaces, $espacios_url, $logout_url
+ *            $enlaces, $espacios_html, $logout_url
  */
 
 if (!defined('ABSPATH')) {
@@ -109,6 +109,9 @@ $af_iniciales = function ($n) {
 .afp .afp-enlace b { display: block; color: var(--afp-navy); font-size: 15px; }
 .afp .afp-enlace span { font-size: 13px; color: var(--afp-muted); }
 .afp .afp-vacio { color: var(--afp-muted); font-size: 15px; }
+.afp .afp-padre { border: 1px solid var(--afp-line); border-radius: 14px; padding: 6px 18px 2px; margin: 0 0 16px; }
+.afp .afp-padre legend { padding: 0 8px; font-size: 15px; font-weight: 800; color: var(--afp-navy); }
+.afp .afp-sec-espacios .apdf { padding: 0; max-width: none; }
 @media (max-width: 600px) {
     .afp .afp-head { padding: 20px; }
     .afp .afp-hola { font-size: 23px; }
@@ -136,9 +139,7 @@ $af_iniciales = function ($n) {
         <?php if ($enlaces) : ?>
             <button type="button" class="afp-tab" data-sec="enlaces"><?php esc_html_e('Enlaces de interés', 'area-familias'); ?></button>
         <?php endif; ?>
-        <?php if ($espacios_url) : ?>
-            <a class="afp-tab" href="<?php echo esc_url($espacios_url); ?>"><?php esc_html_e('Espacios de aula', 'area-familias'); ?> ↗</a>
-        <?php endif; ?>
+        <button type="button" class="afp-tab" data-sec="espacios"><?php esc_html_e('Espacios de aula', 'area-familias'); ?></button>
     </nav>
 
     <?php if ($msg) : ?>
@@ -198,22 +199,27 @@ $af_iniciales = function ($n) {
                     echo esc_html($nh ? sprintf(__('Datos de contacto de la familia de %s.', 'area-familias'), implode(', ', $nh)) : __('Datos de contacto de tu familia.', 'area-familias'));
                     ?>
                 </p>
-                <div class="afp-nota"><?php esc_html_e('Si cambias tu dirección o el teléfono de emergencia, avisaremos automáticamente a la tutora o el tutor y a secretaría.', 'area-familias'); ?></div>
+                <div class="afp-nota"><?php esc_html_e('Si cambias algún teléfono o dirección, se actualiza al momento en el colegio y avisamos a la tutora o el tutor y a secretaría.', 'area-familias'); ?></div>
                 <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                     <input type="hidden" name="action" value="af_guardar_datos">
                     <input type="hidden" name="familia_id" value="<?php echo esc_attr($f['id']); ?>">
                     <?php wp_nonce_field('af_guardar_datos'); ?>
-                    <div class="afp-field">
-                        <label for="afp-tel-<?php echo esc_attr($f['id']); ?>"><?php esc_html_e('Teléfono de emergencia', 'area-familias'); ?></label>
-                        <input type="tel" id="afp-tel-<?php echo esc_attr($f['id']); ?>" name="telefono" value="<?php echo esc_attr($f['telefono']); ?>" required>
-                        <small><?php esc_html_e('El número al que llamará el colegio si ocurre algo. Puedes poner dos separados por " / ".', 'area-familias'); ?></small>
-                    </div>
                     <?php foreach ($f['contactos'] as $c) : ?>
-                        <div class="afp-field">
-                            <label for="afp-dir-<?php echo esc_attr($c['id']); ?>"><?php printf(esc_html__('Dirección de %s', 'area-familias'), esc_html($c['nombre'])); ?></label>
-                            <input type="text" id="afp-dir-<?php echo esc_attr($c['id']); ?>" name="direccion[<?php echo esc_attr($c['id']); ?>]" value="<?php echo esc_attr($c['direccion']); ?>">
-                        </div>
+                        <fieldset class="afp-padre">
+                            <legend><?php echo esc_html($c['nombre']); ?></legend>
+                            <div class="afp-field">
+                                <label for="afp-tel-<?php echo esc_attr($c['id']); ?>"><?php esc_html_e('Teléfono de emergencia', 'area-familias'); ?></label>
+                                <input type="tel" id="afp-tel-<?php echo esc_attr($c['id']); ?>" name="telefono[<?php echo esc_attr($c['id']); ?>]" value="<?php echo esc_attr(isset($c['telefono']) ? $c['telefono'] : ''); ?>" placeholder="<?php esc_attr_e('Ej.: 600 123 456', 'area-familias'); ?>">
+                            </div>
+                            <div class="afp-field">
+                                <label for="afp-dir-<?php echo esc_attr($c['id']); ?>"><?php esc_html_e('Dirección', 'area-familias'); ?></label>
+                                <input type="text" id="afp-dir-<?php echo esc_attr($c['id']); ?>" name="direccion[<?php echo esc_attr($c['id']); ?>]" value="<?php echo esc_attr($c['direccion']); ?>">
+                            </div>
+                        </fieldset>
                     <?php endforeach; ?>
+                    <?php if (!empty($f['telefono'])) : ?>
+                        <p class="afp-sub"><?php printf(esc_html__('Teléfono que teníamos de la familia: %s. Escríbelo en el padre o la madre que corresponda.', 'area-familias'), esc_html($f['telefono'])); ?></p>
+                    <?php endif; ?>
                     <button type="submit" class="afp-btn"><?php esc_html_e('Guardar cambios', 'area-familias'); ?></button>
                 </form>
             </div>
@@ -229,6 +235,14 @@ $af_iniciales = function ($n) {
             <?php if ($servicios) : ?>
                 <div class="afp-chips"><?php foreach ($servicios as $sv) : ?><span class="afp-chip"><?php echo esc_html($sv); ?></span><?php endforeach; ?></div>
             <?php endif; ?>
+        </div>
+    </section>
+
+    <!-- Espacios de aula -->
+    <section class="afp-sec afp-sec-espacios" id="afp-espacios" data-sec="espacios" hidden>
+        <div class="afp-card">
+            <h2 class="afp-h2"><?php esc_html_e('Espacios de aula', 'area-familias'); ?></h2>
+            <?php echo $espacios_html; // phpcs:ignore WordPress.Security.EscapeOutput -- generated by AF_Espacios ?>
         </div>
     </section>
 

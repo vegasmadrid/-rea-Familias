@@ -27,6 +27,7 @@ class AF_Ajustes {
     private function __construct() {
         add_action('admin_menu', array($this, 'register_menu'));
         add_action('admin_post_af_save_ajustes', array($this, 'handle_save'));
+        add_action('init', array(__CLASS__, 'maybe_upgrade'), 1);
     }
 
     public static function defaults() {
@@ -50,7 +51,6 @@ class AF_Ajustes {
             'profesores_url'     => 'https://profesores.casadelavirgen.es/',
             'api_key'            => '',
             'cache_minutos'      => 60,
-            'espacios_page_id'   => 0,
             'espacios_intro'     => 'Busca el curso de tu hijo o hija y pulsa **Abrir en Google Chat**. Entra con la cuenta del colegio con la que se te ha añadido al espacio.',
             'espacios_tutor'     => 'yes',
             'espacios_foto'      => 'yes',
@@ -81,9 +81,26 @@ class AF_Ajustes {
     public static function update($values) {
         $s = get_option(self::OPTION, array());
         $s = array_merge(is_array($s) ? $s : array(), $values);
-        // Options that no longer exist (the spaces page now uses the website's header).
-        unset($s['espacios_titulo'], $s['espacios_tribanda']);
+        // Options that no longer exist: the spaces page now lives inside the family panel.
+        unset($s['espacios_titulo'], $s['espacios_tribanda'], $s['espacios_page_id']);
         update_option(self::OPTION, $s);
+    }
+
+    /**
+     * One-time clean-up when updating: the old "Espacios de aula" page is no longer
+     * used (now it is an option of the panel), so it stops being public.
+     */
+    public static function maybe_upgrade() {
+        if (get_option('af_version') === AREA_FAMILIAS_VERSION) {
+            return;
+        }
+        $s = get_option(self::OPTION, array());
+        if (is_array($s) && !empty($s['espacios_page_id'])) {
+            $s['public_page_ids'] = array_values(array_diff(array_map('absint', (array) (isset($s['public_page_ids']) ? $s['public_page_ids'] : array())), array((int) $s['espacios_page_id'])));
+            unset($s['espacios_page_id']);
+            update_option(self::OPTION, $s);
+        }
+        update_option('af_version', AREA_FAMILIAS_VERSION, false);
     }
 
     public static function flash($text, $type = 'success') {

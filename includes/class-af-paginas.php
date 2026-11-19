@@ -1,7 +1,7 @@
 <?php
 /**
  * Inyecta las pantallas del plugin en las páginas elegidas en el backend
- * (login y espacios de aula), sin necesidad de shortcodes.
+ * (login y página de inicio con el panel de la familia), sin shortcodes.
  */
 
 if (!defined('ABSPATH')) {
@@ -27,12 +27,8 @@ class AF_Paginas {
     private function get_map() {
         $map = array();
         $login = absint(AF_Ajustes::get('login_page_id'));
-        $espacios = absint(AF_Ajustes::get('espacios_page_id'));
         if ($login) {
             $map[$login] = array('AF_Login', 'render_static');
-        }
-        if ($espacios && !isset($map[$espacios])) {
-            $map[$espacios] = array('AF_Espacios', 'render_pagina');
         }
         $inicio = absint(AF_Ajustes::get('start_page_id'));
         if ($inicio && !isset($map[$inicio])) {

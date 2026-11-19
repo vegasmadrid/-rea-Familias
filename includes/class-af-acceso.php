@@ -34,6 +34,11 @@ class AF_Acceso {
         // Whole-site restriction
         add_action('template_redirect', array($this, 'restrict_frontend'), 0);
         add_action('template_redirect', array($this, 'redirigir_mantenimiento'), 1);
+
+        // The website's front page (the domain itself) is the start page, or the
+        // maintenance page for families while maintenance mode is on.
+        add_filter('pre_option_show_on_front', array($this, 'filter_show_on_front'));
+        add_filter('pre_option_page_on_front', array($this, 'filter_page_on_front'));
         add_filter('rest_authentication_errors', array($this, 'restrict_rest_api'), 99);
         foreach (array('do_feed', 'do_feed_rdf', 'do_feed_rss', 'do_feed_rss2', 'do_feed_atom') as $feed) {
             add_action($feed, array($this, 'restrict_feed'), 0);
@@ -224,6 +229,35 @@ class AF_Acceso {
             return true;
         }
         return (bool) apply_filters('area_familias_is_public_request', false);
+    }
+
+    /* ---------------------------------------------------------------------
+     * Portada de la web
+     * ------------------------------------------------------------------- */
+
+    /**
+     * Page that the front page of the website shows, or 0 to keep the one set in
+     * Ajustes › Lectura (no start page chosen). Only on the public site: the
+     * WordPress dashboard keeps showing its own setting.
+     */
+    public static function get_front_page_id() {
+        if (is_admin() || !did_action('init')) {
+            return 0;
+        }
+        if (self::en_mantenimiento() && !self::is_staff(wp_get_current_user())) {
+            return absint(AF_Ajustes::get('mantenimiento_page_id'));
+        }
+        $id = absint(AF_Ajustes::get('start_page_id'));
+        return ($id && get_post_status($id) === 'publish') ? $id : 0;
+    }
+
+    public function filter_show_on_front($value) {
+        return self::get_front_page_id() ? 'page' : $value;
+    }
+
+    public function filter_page_on_front($value) {
+        $id = self::get_front_page_id();
+        return $id ? $id : $value;
     }
 
     /**

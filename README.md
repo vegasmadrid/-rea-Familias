@@ -6,7 +6,7 @@ Plugin de WordPress para el Área de Familias del Colegio Casa de la Virgen (`fa
 
 ### Área Familias › Ajustes
 - **Página de login**: se elige una página y su contenido se sustituye por la pantalla de acceso (logo, tribanda corporativa y botón "Accede con tu cuenta del colegio" de *Nextend Social Login*, sin logo de Google). Siempre es pública.
-- **Página de inicio**: a dónde van las familias al iniciar sesión (o, si se marca, a la página que intentaban abrir).
+- **Página de inicio**: a dónde van las familias al iniciar sesión (o, si se marca, a la página que intentaban abrir). Es también la **portada de la web** (la dirección del dominio), en lugar de la de *Ajustes › Lectura*.
 - **Solo cuentas del colegio**: únicamente las cuentas `@casadelavirgen.es` (dominio configurable) pueden registrarse y entrar:
   - Nextend Social Login no crea cuentas de otros dominios.
   - El acceso con usuario y contraseña de otros dominios se rechaza.

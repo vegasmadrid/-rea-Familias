@@ -48,7 +48,7 @@ $af_page_select = function ($name, $selected, $empty) use ($pages) {
                     <th scope="row"><label for="start_page_id"><?php esc_html_e('Página de inicio', 'area-familias'); ?></label></th>
                     <td>
                         <?php $af_page_select('start_page_id', $s['start_page_id'], __('— Portada de la web —', 'area-familias')); ?>
-                        <p class="description"><?php esc_html_e('A dónde van las familias después de iniciar sesión.', 'area-familias'); ?></p>
+                        <p class="description"><?php esc_html_e('A dónde van las familias después de iniciar sesión. También es la portada de la web (lo que se ve al abrir la dirección del dominio), en lugar de la elegida en Ajustes › Lectura. En modo mantenimiento, las familias ven como portada la página de mantenimiento.', 'area-familias'); ?></p>
                         <label><input type="checkbox" name="respect_redirect_to" value="1" <?php checked($s['respect_redirect_to'], 'yes'); ?>> <?php esc_html_e('Si intentaban abrir una página concreta, volver a esa página', 'area-familias'); ?></label>
                     </td>
                 </tr>

@@ -33,6 +33,7 @@ class AF_Acceso {
 
         // Whole-site restriction
         add_action('template_redirect', array($this, 'restrict_frontend'), 0);
+        add_action('template_redirect', array($this, 'redirigir_mantenimiento'), 1);
         add_filter('rest_authentication_errors', array($this, 'restrict_rest_api'), 99);
         foreach (array('do_feed', 'do_feed_rdf', 'do_feed_rss', 'do_feed_rss2', 'do_feed_atom') as $feed) {
             add_action($feed, array($this, 'restrict_feed'), 0);
@@ -132,7 +133,20 @@ class AF_Acceso {
         return wp_login_url($redirect_to);
     }
 
+    /**
+     * Maintenance mode active (families start on another page).
+     */
+    public static function en_mantenimiento() {
+        $id = absint(AF_Ajustes::get('mantenimiento_page_id'));
+        return AF_Ajustes::get('mantenimiento') === 'yes' && $id && get_post_status($id) === 'publish';
+    }
+
     public static function get_start_url() {
+        // During maintenance families start on the maintenance page; editors and
+        // administrators keep the real start page to test the changes.
+        if (self::en_mantenimiento() && !self::is_staff(wp_get_current_user())) {
+            return get_permalink(absint(AF_Ajustes::get('mantenimiento_page_id')));
+        }
         $id = absint(AF_Ajustes::get('start_page_id'));
         if ($id && get_post_status($id) === 'publish') {
             return get_permalink($id);
@@ -210,6 +224,20 @@ class AF_Acceso {
             return true;
         }
         return (bool) apply_filters('area_familias_is_public_request', false);
+    }
+
+    /**
+     * During maintenance, families who open the panel page go to the maintenance page.
+     */
+    public function redirigir_mantenimiento() {
+        if (!self::en_mantenimiento() || !is_user_logged_in() || self::is_staff(wp_get_current_user())) {
+            return;
+        }
+        $start = absint(AF_Ajustes::get('start_page_id'));
+        if ($start && (int) get_queried_object_id() === $start) {
+            wp_safe_redirect(get_permalink(absint(AF_Ajustes::get('mantenimiento_page_id'))));
+            exit;
+        }
     }
 
     public function restrict_frontend() {

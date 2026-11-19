@@ -55,6 +55,27 @@ $af_page_select = function ($name, $selected, $empty) use ($pages) {
             </table>
         </div>
 
+        <div class="af-card <?php echo $s['mantenimiento'] === 'yes' ? 'af-card-warn' : ''; ?>">
+            <h2><span class="dashicons dashicons-hammer"></span> <?php esc_html_e('Modo mantenimiento', 'area-familias'); ?></h2>
+            <table class="form-table" role="presentation">
+                <tr>
+                    <th scope="row"><?php esc_html_e('Activar', 'area-familias'); ?></th>
+                    <td>
+                        <label><input type="checkbox" name="mantenimiento" value="1" <?php checked($s['mantenimiento'], 'yes'); ?>> <strong><?php esc_html_e('Sitio en mantenimiento', 'area-familias'); ?></strong></label>
+                        <p class="description"><?php esc_html_e('Mientras está activo, las familias empiezan en la página de abajo (por ejemplo, la página de inicio antigua) y no ven el panel nuevo. El plugin no inserta nada en esa página. Los editores y administradores siguen viendo la página de inicio nueva para probar los cambios.', 'area-familias'); ?></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="mantenimiento_page_id"><?php esc_html_e('Página de inicio durante el mantenimiento', 'area-familias'); ?></label></th>
+                    <td>
+                        <?php $af_page_select('mantenimiento_page_id', $s['mantenimiento_page_id'], __('— Elige una página —', 'area-familias')); ?>
+                        <?php if ($s['mantenimiento_page_id']) : ?> <a href="<?php echo esc_url(get_permalink($s['mantenimiento_page_id'])); ?>" target="_blank" rel="noopener"><?php esc_html_e('Ver', 'area-familias'); ?></a><?php endif; ?>
+                        <p class="description"><?php esc_html_e('Tiene que ser distinta de la página de inicio y de la de login. El acceso con la cuenta del colegio sigue funcionando igual.', 'area-familias'); ?></p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
         <div class="af-card">
             <h2><span class="dashicons dashicons-lock"></span> <?php esc_html_e('Acceso', 'area-familias'); ?></h2>
             <table class="form-table" role="presentation">

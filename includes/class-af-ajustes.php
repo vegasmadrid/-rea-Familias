@@ -37,6 +37,9 @@ class AF_Ajustes {
             'restrict_site'      => 'yes',
             'login_page_id'      => 0,
             'start_page_id'      => 0,
+            // Mantenimiento: families start on another page, without any plugin content.
+            'mantenimiento'         => 'no',
+            'mantenimiento_page_id' => 0,
             'respect_redirect_to'=> 'yes',
             'public_page_ids'    => array(),
             'hide_admin_bar'     => 'yes',
@@ -61,6 +64,7 @@ class AF_Ajustes {
             'panel_saludo'       => 'Bienvenida al Área de Familias del Colegio Casa de la Virgen.',
             'panel_enlaces'      => '',
             'panel_servicios'    => AF_Panel::servicios_por_defecto(),
+            'panel_aviso_telefono' => 'Por favor, rellena tus datos de contacto: nos falta el teléfono de emergencia de {nombres}. Es muy importante para poder avisaros si ocurre algo.',
         );
     }
 
@@ -163,6 +167,8 @@ class AF_Ajustes {
             'restrict_site'       => $yes('restrict_site'),
             'login_page_id'       => isset($_POST['login_page_id']) ? absint($_POST['login_page_id']) : 0,
             'start_page_id'       => isset($_POST['start_page_id']) ? absint($_POST['start_page_id']) : 0,
+            'mantenimiento'       => $yes('mantenimiento'),
+            'mantenimiento_page_id' => isset($_POST['mantenimiento_page_id']) ? absint($_POST['mantenimiento_page_id']) : 0,
             'respect_redirect_to' => $yes('respect_redirect_to'),
             'public_page_ids'     => isset($_POST['public_page_ids']) ? array_values(array_filter(array_map('absint', (array) wp_unslash($_POST['public_page_ids'])))) : array(),
             'hide_admin_bar'      => $yes('hide_admin_bar'),
@@ -174,7 +180,14 @@ class AF_Ajustes {
             'login_boton'         => $txt('login_boton'),
         ));
 
-        self::flash(__('Ajustes guardados.', 'area-familias'));
+        $m_id = absint(self::get('mantenimiento_page_id'));
+        if (self::get('mantenimiento') === 'yes' && (!$m_id || in_array($m_id, array(absint(self::get('start_page_id')), absint(self::get('login_page_id'))), true))) {
+            // Without a different page, maintenance cannot work.
+            self::update(array('mantenimiento' => 'no'));
+            self::flash(__('Ajustes guardados, pero el modo mantenimiento no se ha activado: elige una página distinta de la de inicio y de la de login.', 'area-familias'), 'error');
+        } else {
+            self::flash(__('Ajustes guardados.', 'area-familias'));
+        }
         wp_safe_redirect(admin_url('admin.php?page=area-familias'));
         exit;
     }

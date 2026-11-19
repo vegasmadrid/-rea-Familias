@@ -15,6 +15,7 @@ Plugin de WordPress para el Área de Familias del Colegio Casa de la Virgen (`fa
 - **Restringir toda la web**: sin sesión solo se ven la página de login y las páginas marcadas como públicas. También se cierran la API REST y los feeds.
 - Ocultar la barra de WordPress y bloquear `/wp-admin` a las familias.
 - Textos de la pantalla de acceso, logotipo y tribanda.
+- **Modo mantenimiento**: mientras está activo, las familias van al iniciar sesión a la página que elijas (por ejemplo, la página de inicio antigua) y en ella no se inserta nada. Los editores y administradores siguen viendo el panel nuevo, con un aviso, para poder probar los cambios.
 
 ### Área Familias › Espacios de aula
 - Los espacios de Google Chat de cada aula se muestran como la opción **Espacios de aula** del panel de la familia (ya no es una página aparte).
@@ -26,6 +27,7 @@ Plugin de WordPress para el Área de Familias del Colegio Casa de la Virgen (`fa
   - **Mis hijos**: curso, etapa, tutor/a (con foto) y botón a su espacio de aula.
   - **Mis datos**: **teléfono de emergencia y dirección de cada padre/madre**, editables. Se guardan al momento en el Área de Profesores, que avisa por correo al tutor/a y a Secretaría.
   - **Espacios de aula**, **Reservar un servicio** (muy pronto) y **Enlaces de interés** (configurables).
+- Si falta el teléfono de emergencia de algún padre/madre, se muestra arriba un aviso (texto configurable) con un botón para completar los datos, y la pestaña **Mis datos** se marca hasta que se rellene.
 - Los datos de alumnos y familias viven en el Área de Profesores; aquí solo se piden los de la familia que ha iniciado sesión (por su correo).
 
 ## Instalación

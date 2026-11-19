@@ -3,7 +3,7 @@
  * Panel de la familia (página de inicio del Área Familias).
  *
  * Variables: $user, $s, $familia (array|WP_Error), $msg, $nombre, $servicios,
- *            $enlaces, $espacios_html, $logout_url
+ *            $enlaces, $espacios_html, $logout_url, $sin_telefono, $mantenimiento
  */
 
 if (!defined('ABSPATH')) {
@@ -109,6 +109,13 @@ $af_iniciales = function ($n) {
 .afp .afp-enlace b { display: block; color: var(--afp-navy); font-size: 15px; }
 .afp .afp-enlace span { font-size: 13px; color: var(--afp-muted); }
 .afp .afp-vacio { color: var(--afp-muted); font-size: 15px; }
+.afp .afp-aviso { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; background: #fff8ec; border: 1px solid #f3cf98; border-left: 5px solid var(--afp-orange); border-radius: 14px; padding: 14px 18px; margin: 18px 0 0; }
+.afp .afp-aviso p { flex: 1 1 280px; margin: 0; font-size: 15px; font-weight: 600; color: #7a4a10; }
+.afp .afp-aviso-icon { flex: 0 0 32px; width: 32px; height: 32px; border-radius: 50%; background: var(--afp-orange); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+.afp .afp-n-alerta { background: #d64545; }
+.afp .afp-field.is-falta input { border-color: #f3cf98; background: #fffdf8; }
+.afp .afp-field.is-falta label em { color: #b45309; font-style: normal; font-weight: 600; }
+.afp .afp-mant { background: #eef3fe; color: var(--afp-navy); border: 1px solid #c9d8fb; margin-top: 16px; }
 .afp .afp-padre { border: 1px solid var(--afp-line); border-radius: 14px; padding: 6px 18px 2px; margin: 0 0 16px; }
 .afp .afp-padre legend { padding: 0 8px; font-size: 15px; font-weight: 800; color: var(--afp-navy); }
 .afp .afp-sec-espacios .apdf { padding: 0; max-width: none; }
@@ -132,9 +139,21 @@ $af_iniciales = function ($n) {
         <a class="afp-salir" href="<?php echo esc_url($logout_url); ?>"><?php esc_html_e('Salir', 'area-familias'); ?></a>
     </header>
 
+    <?php if ($mantenimiento) : ?>
+        <div class="afp-msg afp-mant"><?php esc_html_e('Modo mantenimiento activo: las familias no ven este panel (empiezan en la página de mantenimiento). Tú lo ves porque eres editor o administrador.', 'area-familias'); ?></div>
+    <?php endif; ?>
+
+    <?php if ($sin_telefono) : ?>
+        <div class="afp-aviso" role="alert">
+            <span class="afp-aviso-icon" aria-hidden="true">!</span>
+            <p><?php echo esc_html(str_replace('{nombres}', implode(', ', $sin_telefono), (string) $s['panel_aviso_telefono'])); ?></p>
+            <button type="button" class="afp-btn" data-ir="datos"><?php esc_html_e('Completar mis datos', 'area-familias'); ?></button>
+        </div>
+    <?php endif; ?>
+
     <nav class="afp-tabs" role="tablist">
         <button type="button" class="afp-tab is-active" data-sec="hijos"><?php esc_html_e('Mis hijos', 'area-familias'); ?><?php if ($af_hijos) : ?> <span class="afp-n"><?php echo count($af_hijos); ?></span><?php endif; ?></button>
-        <button type="button" class="afp-tab" data-sec="datos"><?php esc_html_e('Mis datos', 'area-familias'); ?></button>
+        <button type="button" class="afp-tab" data-sec="datos"><?php esc_html_e('Mis datos', 'area-familias'); ?><?php if ($sin_telefono) : ?> <span class="afp-n afp-n-alerta">!</span><?php endif; ?></button>
         <button type="button" class="afp-tab" data-sec="reservar"><?php esc_html_e('Reservar un servicio', 'area-familias'); ?></button>
         <?php if ($enlaces) : ?>
             <button type="button" class="afp-tab" data-sec="enlaces"><?php esc_html_e('Enlaces de interés', 'area-familias'); ?></button>
@@ -207,8 +226,8 @@ $af_iniciales = function ($n) {
                     <?php foreach ($f['contactos'] as $c) : ?>
                         <fieldset class="afp-padre">
                             <legend><?php echo esc_html($c['nombre']); ?></legend>
-                            <div class="afp-field">
-                                <label for="afp-tel-<?php echo esc_attr($c['id']); ?>"><?php esc_html_e('Teléfono de emergencia', 'area-familias'); ?></label>
+                            <div class="afp-field<?php echo trim((string) (isset($c['telefono']) ? $c['telefono'] : '')) === '' ? ' is-falta' : ''; ?>">
+                                <label for="afp-tel-<?php echo esc_attr($c['id']); ?>"><?php esc_html_e('Teléfono de emergencia', 'area-familias'); ?><?php if (trim((string) (isset($c['telefono']) ? $c['telefono'] : '')) === '') : ?> <em><?php esc_html_e('(falta)', 'area-familias'); ?></em><?php endif; ?></label>
                                 <input type="tel" id="afp-tel-<?php echo esc_attr($c['id']); ?>" name="telefono[<?php echo esc_attr($c['id']); ?>]" value="<?php echo esc_attr(isset($c['telefono']) ? $c['telefono'] : ''); ?>" placeholder="<?php esc_attr_e('Ej.: 600 123 456', 'area-familias'); ?>">
                             </div>
                             <div class="afp-field">
@@ -279,6 +298,15 @@ $af_iniciales = function ($n) {
         b.addEventListener('click', function () {
             show(b.getAttribute('data-sec'));
             history.replaceState(null, '', '#' + b.getAttribute('data-sec'));
+        });
+    });
+    // Buttons that open an option (e.g. "Completar mis datos").
+    root.querySelectorAll('[data-ir]').forEach(function (b) {
+        b.addEventListener('click', function () {
+            show(b.getAttribute('data-ir'));
+            history.replaceState(null, '', '#' + b.getAttribute('data-ir'));
+            var t = root.querySelector('.afp-tabs');
+            if (t) { t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
         });
     });
     if (location.hash) { show(location.hash.slice(1)); }

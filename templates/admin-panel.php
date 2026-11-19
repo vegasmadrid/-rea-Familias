@@ -38,6 +38,12 @@ if (!defined('ABSPATH')) {
         </div>
 
         <div class="af-card">
+            <h2><span class="dashicons dashicons-warning"></span> <?php esc_html_e('Aviso de teléfono de emergencia', 'area-familias'); ?></h2>
+            <p class="description"><?php esc_html_e('Se muestra arriba del panel a las familias en las que falta el teléfono de emergencia de algún padre o madre. {nombres} se sustituye por sus nombres.', 'area-familias'); ?></p>
+            <textarea name="panel_aviso_telefono" class="large-text" rows="2"><?php echo esc_textarea($s['panel_aviso_telefono']); ?></textarea>
+        </div>
+
+        <div class="af-card">
             <h2><span class="dashicons dashicons-admin-links"></span> <?php esc_html_e('Enlaces de interés', 'area-familias'); ?></h2>
             <p class="description"><?php esc_html_e('Uno por línea: Título | dirección | descripción (opcional). Si no hay ninguno, la pestaña no aparece.', 'area-familias'); ?></p>
             <textarea name="panel_enlaces" class="large-text code" rows="6" placeholder="Calendario escolar | https://madrid.casadelavirgen.es/calendario | Festivos y evaluaciones&#10;Menú del comedor | https://..."><?php echo esc_textarea($s['panel_enlaces']); ?></textarea>

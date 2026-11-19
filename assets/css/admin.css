@@ -22,3 +22,4 @@
 .af-pill-ok { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
 .af-pill-warn { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
 @media (max-width: 960px) { .af-columns { grid-template-columns: 1fr; } }
+.af-card-warn { border-color: #f3cf98; background: #fffbf3; }

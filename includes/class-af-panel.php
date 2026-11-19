@@ -163,6 +163,19 @@ class AF_Panel {
                 $enlaces[] = array('titulo' => $p[0], 'url' => $p[1], 'desc' => isset($p[2]) ? $p[2] : '');
             }
         }
+        // Parents without an emergency phone: ask the family to fill in its details.
+        $sin_telefono = array();
+        if (!is_wp_error($familia) && !empty($familia['familias'])) {
+            foreach ($familia['familias'] as $f) {
+                foreach ($f['contactos'] as $c) {
+                    if (trim((string) (isset($c['telefono']) ? $c['telefono'] : '')) === '') {
+                        $sin_telefono[] = $c['nombre'];
+                    }
+                }
+            }
+        }
+        $mantenimiento = AF_Acceso::en_mantenimiento();
+
         // Espacios de aula, as one more option of the panel.
         $espacios_html = AF_Espacios::render_pagina();
         $logout_url = AF_Acceso::get_logout_url();
@@ -199,6 +212,7 @@ class AF_Panel {
             'panel_saludo'    => isset($_POST['panel_saludo']) ? sanitize_textarea_field(wp_unslash($_POST['panel_saludo'])) : '',
             'panel_enlaces'   => isset($_POST['panel_enlaces']) ? sanitize_textarea_field(wp_unslash($_POST['panel_enlaces'])) : '',
             'panel_servicios' => isset($_POST['panel_servicios']) ? sanitize_textarea_field(wp_unslash($_POST['panel_servicios'])) : '',
+            'panel_aviso_telefono' => isset($_POST['panel_aviso_telefono']) ? sanitize_textarea_field(wp_unslash($_POST['panel_aviso_telefono'])) : '',
         ));
         AF_Ajustes::flash(__('Panel de familias guardado.', 'area-familias'));
         wp_safe_redirect(admin_url('admin.php?page=area-familias-panel'));

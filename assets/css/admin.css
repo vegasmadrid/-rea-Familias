@@ -23,3 +23,15 @@
 .af-pill-warn { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
 @media (max-width: 960px) { .af-columns { grid-template-columns: 1fr; } }
 .af-card-warn { border-color: #f3cf98; background: #fffbf3; }
+
+/* Reservas de servicios */
+.af-res-indice { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
+.af-res-indice a { background: #fff; border: 1px solid #e2e8f0; border-radius: 999px; padding: 6px 14px; text-decoration: none; font-weight: 600; color: #313280; }
+.af-res-indice a:hover { border-color: #313280; }
+.af-res-card h2 { justify-content: flex-start; }
+.af-res-ico { font-size: 20px; }
+.af-res-activo { margin-left: auto; font-size: 13px; font-weight: 600; background: #eef3fe; border-radius: 999px; padding: 4px 12px; }
+.af-res-card.is-off { opacity: .75; }
+.af-res-card.is-off .af-res-activo { background: #fffbeb; }
+.af-res-card .form-table th { width: 180px; }
+.af-res-acciones { display: flex; align-items: center; gap: 16px; }

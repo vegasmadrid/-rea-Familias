@@ -26,9 +26,16 @@ Plugin de WordPress para el Área de Familias del Colegio Casa de la Virgen (`fa
 - En la **Página de inicio** (Ajustes) se muestra el panel de la familia: saludo ("Hola, …") y sus opciones:
   - **Mis hijos**: curso, etapa, tutor/a (con foto) y botón a su espacio de aula.
   - **Mis datos**: **teléfono de emergencia y dirección de cada padre/madre**, editables. Se guardan al momento en el Área de Profesores, que avisa por correo al tutor/a y a Secretaría.
-  - **Espacios de aula**, **Reservar un servicio** (muy pronto) y **Enlaces de interés** (configurables).
+  - **Espacios de aula**, **Reservar un servicio** y **Enlaces de interés** (configurables).
 - Si falta el teléfono de emergencia de algún padre/madre, se muestra arriba un aviso (texto configurable) con un botón para completar los datos, y la pestaña **Mis datos** se marca hasta que se rellene.
 - Los datos de alumnos y familias viven en el Área de Profesores; aquí solo se piden los de la familia que ha iniciado sesión (por su correo).
+
+### Reservar un servicio (Área Familias › Reservas de servicios)
+- La familia elige a uno o varios hijos, el servicio, el día (o varios días: desde – hasta y días de la semana) y contesta sus preguntas. Ve un resumen antes de reservar y, en **Mis reservas**, sus reservas pendientes, que puede anular dentro del plazo.
+- Servicios: **Ampliación de horario** (7:30 a 9:45, con o sin desayuno), **Comedor** (pregunta si necesita dieta), **Ludoteca** (16:30 a 18:00), **Dieta** (tipo de dieta, instrucciones especiales y motivo opcional), **Salida anticipada** (hora de salida, quién le recoge y motivo opcionales) y **Retraso justificado** (hora de llegada y motivo opcional). Todos pueden llevar observaciones.
+- De cada servicio se configura: si se puede reservar, nombre, descripción, horario (u horas permitidas), precio, plazo para reservar y anular (hasta las HH:MM del mismo día o de X días antes), si se pueden reservar varios días de una vez, etapas que lo pueden usar, una nota para las familias, sus preguntas y correos a los que avisar además del tutor/a y Secretaría.
+- **Días sin clase** (festivos y vacaciones) y antelación máxima: esos días, y los fines de semana, no se pueden reservar.
+- Las reservas se guardan en el Área de Profesores, que envía los correos (tutor/a, Secretaría y confirmación a la familia; textos en sus *Correos automáticos*) y las muestra en su backend, en la pestaña *Reservas* de cada tutor/a y en el listado de cocina.
 
 ## Instalación
 

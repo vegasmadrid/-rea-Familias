@@ -8,7 +8,7 @@
  * - Mis datos: emergency phone and address of each parent (editable; saved right
  *   away in the Área de Profesores, which notifies the tutor/a and Secretaría).
  * - Espacios de aula: Google Chat spaces of every class.
- * - Reservar un servicio (coming soon) and Enlaces de interés.
+ * - Reservar un servicio (AF_Reservas) and Enlaces de interés.
  *
  * The data lives in the Área de Profesores and is read through its API with the
  * e-mail of the logged-in family.
@@ -43,7 +43,7 @@ class AF_Panel {
      * Datos de la familia (Área de Profesores)
      * ------------------------------------------------------------------- */
 
-    private static function api($method, $path, $args = array()) {
+    public static function api($method, $path, $args = array()) {
         $key = (string) AF_Ajustes::get('api_key');
         $base = trailingslashit((string) AF_Ajustes::get('profesores_url'));
         if ($key === '' || $base === '/') {
@@ -155,7 +155,8 @@ class AF_Panel {
         }
 
         $nombre = trim((string) $user->first_name) !== '' ? $user->first_name : $user->display_name;
-        $servicios = array_values(array_filter(array_map('trim', explode("\n", (string) $s['panel_servicios']))));
+        // Reservar un servicio + Mis reservas.
+        $reservar = AF_Reservas::render_seccion(!is_wp_error($familia) && !empty($familia['hijos']) ? $familia['hijos'] : array(), $user);
         $enlaces = array();
         foreach (explode("\n", (string) $s['panel_enlaces']) as $line) {
             $p = array_map('trim', explode('|', $line));
@@ -211,7 +212,6 @@ class AF_Panel {
         AF_Ajustes::update(array(
             'panel_saludo'    => isset($_POST['panel_saludo']) ? sanitize_textarea_field(wp_unslash($_POST['panel_saludo'])) : '',
             'panel_enlaces'   => isset($_POST['panel_enlaces']) ? sanitize_textarea_field(wp_unslash($_POST['panel_enlaces'])) : '',
-            'panel_servicios' => isset($_POST['panel_servicios']) ? sanitize_textarea_field(wp_unslash($_POST['panel_servicios'])) : '',
             'panel_aviso_telefono' => isset($_POST['panel_aviso_telefono']) ? sanitize_textarea_field(wp_unslash($_POST['panel_aviso_telefono'])) : '',
         ));
         AF_Ajustes::flash(__('Panel de familias guardado.', 'area-familias'));

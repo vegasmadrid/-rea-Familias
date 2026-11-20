@@ -50,9 +50,8 @@ if (!defined('ABSPATH')) {
         </div>
 
         <div class="af-card">
-            <h2><span class="dashicons dashicons-calendar-alt"></span> <?php esc_html_e('Servicios que se podrán reservar', 'area-familias'); ?></h2>
-            <p class="description"><?php esc_html_e('Uno por línea. Por ahora se muestran como "Muy pronto"; los usaremos al activar las reservas.', 'area-familias'); ?></p>
-            <textarea name="panel_servicios" class="large-text" rows="7"><?php echo esc_textarea($s['panel_servicios']); ?></textarea>
+            <h2><span class="dashicons dashicons-calendar-alt"></span> <?php esc_html_e('Reservar un servicio', 'area-familias'); ?></h2>
+            <p><?php esc_html_e('Los servicios que se pueden reservar, sus horarios, plazos y preguntas se configuran en', 'area-familias'); ?> <a href="<?php echo esc_url(admin_url('admin.php?page=area-familias-reservas')); ?>"><?php esc_html_e('Área Familias › Reservas de servicios', 'area-familias'); ?></a>.</p>
         </div>
 
         <p><button type="submit" class="button button-primary button-large"><?php esc_html_e('Guardar', 'area-familias'); ?></button></p>

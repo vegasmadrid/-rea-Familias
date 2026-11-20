@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Área Familias - Colegio Casa de la Virgen
  * Description: Área de Familias del Colegio Casa de la Virgen: acceso solo con la cuenta del colegio (@casadelavirgen.es), páginas de inicio y de login, y espacios de aula de Google Chat leídos del Área de Profesores.
- * Version:     1.4.0
+ * Version:     1.4.1
  * Author:      Colegio Casa de la Virgen
  * Text Domain: area-familias
  * Requires PHP: 7.4
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AREA_FAMILIAS_VERSION', '1.4.0');
+define('AREA_FAMILIAS_VERSION', '1.4.1');
 define('AREA_FAMILIAS_DIR', plugin_dir_path(__FILE__));
 define('AREA_FAMILIAS_URL', plugin_dir_url(__FILE__));
 

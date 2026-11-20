@@ -133,7 +133,7 @@ $afr_prof = trailingslashit((string) AF_Ajustes::get('profesores_url'));
                 <tr>
                     <th scope="row"><?php esc_html_e('Días sin clase', 'area-familias'); ?></th>
                     <td><textarea class="large-text code" rows="8" name="generales[festivos]" placeholder="08/12/2026 | Inmaculada&#10;23/12/2026 - 07/01/2027 | Navidad"><?php echo esc_textarea($gen['festivos']); ?></textarea>
-                        <p class="description"><?php esc_html_e('Uno por línea: un día (08/12/2026) o un periodo (23/12/2026 - 07/01/2027). Después de "|" puedes poner un comentario. Esos días, y los sábados y domingos, no se pueden reservar.', 'area-familias'); ?>
+                        <p class="description"><?php esc_html_e('Uno por línea: un día (08/12/2026) o un periodo (23/12/2026 - 07/01/2027). Después de "|" puedes poner un comentario. Esos días, y los sábados y domingos, no se pueden reservar. También se usan los "Días sin clase" del Área de Profesores (Comedor Diario), así que basta con ponerlos allí.', 'area-familias'); ?>
                             <?php $afr_n = count(AF_Reservas::festivos()); if ($afr_n) : ?><strong><?php printf(esc_html(_n('%d día sin clase configurado.', '%d días sin clase configurados.', $afr_n, 'area-familias')), (int) $afr_n); ?></strong><?php endif; ?></p></td>
                 </tr>
                 <tr>

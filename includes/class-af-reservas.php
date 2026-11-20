@@ -239,6 +239,18 @@ class AF_Reservas {
                 $cache[gmdate('Y-m-d', $t)] = true;
             }
         }
+        // Plus the "Días sin clase" of the Área de Profesores (Comedor Diario), cached for an hour.
+        $remotos = get_transient('af_dias_sin_clase');
+        if (!is_array($remotos)) {
+            $r = AF_Panel::api('GET', '/calendario');
+            $remotos = (!is_wp_error($r) && isset($r['dias_sin_clase']) && is_array($r['dias_sin_clase'])) ? $r['dias_sin_clase'] : array();
+            set_transient('af_dias_sin_clase', $remotos, is_wp_error($r) ? 10 * MINUTE_IN_SECONDS : HOUR_IN_SECONDS);
+        }
+        foreach ($remotos as $f) {
+            if (self::fecha_ok($f)) {
+                $cache[$f] = true;
+            }
+        }
         return $cache;
     }
 

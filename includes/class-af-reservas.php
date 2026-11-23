@@ -223,7 +223,30 @@ class AF_Reservas {
         if ($cache !== null) {
             return $cache;
         }
-        $cache = array();
+        $cache = self::festivos_propios();
+        // Plus the "Días sin clase" of the Área de Profesores (Comedor Diario), cached for an hour.
+        $remotos = get_transient('af_dias_sin_clase');
+        if (!is_array($remotos)) {
+            $r = AF_Panel::api('GET', '/calendario');
+            $remotos = (!is_wp_error($r) && isset($r['dias_sin_clase']) && is_array($r['dias_sin_clase'])) ? $r['dias_sin_clase'] : array();
+            set_transient('af_dias_sin_clase', $remotos, is_wp_error($r) ? 10 * MINUTE_IN_SECONDS : HOUR_IN_SECONDS);
+            if (!is_wp_error($r)) {
+                self::sincronizar();
+            }
+        }
+        foreach ($remotos as $f) {
+            if (self::fecha_ok($f)) {
+                $cache[$f] = true;
+            }
+        }
+        return $cache;
+    }
+
+    /**
+     * Non-school days written in these settings (Y-m-d => true).
+     */
+    public static function festivos_propios() {
+        $out = array();
         foreach (preg_split('/\r\n|\r|\n/', (string) self::generales()['festivos']) as $line) {
             $line = trim(explode('|', $line)[0]);
             if ($line === '') {
@@ -236,22 +259,33 @@ class AF_Reservas {
                 continue;
             }
             for ($t = strtotime($ini . ' 12:00:00 UTC'), $e = strtotime($fin . ' 12:00:00 UTC'), $i = 0; $t <= $e && $i < 400; $t += DAY_IN_SECONDS, $i++) {
-                $cache[gmdate('Y-m-d', $t)] = true;
+                $out[gmdate('Y-m-d', $t)] = true;
             }
         }
-        // Plus the "Días sin clase" of the Área de Profesores (Comedor Diario), cached for an hour.
-        $remotos = get_transient('af_dias_sin_clase');
-        if (!is_array($remotos)) {
-            $r = AF_Panel::api('GET', '/calendario');
-            $remotos = (!is_wp_error($r) && isset($r['dias_sin_clase']) && is_array($r['dias_sin_clase'])) ? $r['dias_sin_clase'] : array();
-            set_transient('af_dias_sin_clase', $remotos, is_wp_error($r) ? 10 * MINUTE_IN_SECONDS : HOUR_IN_SECONDS);
+        return $out;
+    }
+
+    /**
+     * Send the services and the days without school to the Área de Profesores, so that
+     * Portería can book from there with the same rules. Only when something changed
+     * (or $forzar).
+     */
+    public static function sincronizar($forzar = false) {
+        $servicios = array();
+        foreach (self::servicios() as $k => $sv) {
+            $servicios[$k] = array_intersect_key($sv, array_flip(array('activo', 'nombre', 'icono', 'hora_inicio', 'hora_fin', 'precio', 'varios_dias', 'etapas', 'avisar', 'desayuno', 'dieta', 'recoge', 'tipos_dieta')));
         }
-        foreach ($remotos as $f) {
-            if (self::fecha_ok($f)) {
-                $cache[$f] = true;
-            }
+        $datos = array('servicios' => $servicios, 'festivos' => array_keys(self::festivos_propios()));
+        $hash = md5(wp_json_encode($datos));
+        if (!$forzar && get_option('af_servicios_sync') === $hash) {
+            return true;
         }
-        return $cache;
+        $r = AF_Panel::api('POST', '/servicios', $datos);
+        if (is_wp_error($r)) {
+            return $r;
+        }
+        update_option('af_servicios_sync', $hash, false);
+        return true;
     }
 
     private static function dow($f) {
@@ -672,6 +706,7 @@ class AF_Reservas {
         if (!empty($p['restablecer']) && isset(self::definiciones()[$p['restablecer']])) {
             unset($o['servicios'][$p['restablecer']]);
             update_option(self::OPTION, $o, false);
+            self::sincronizar(true);
             AF_Ajustes::flash(__('Servicio restablecido a sus valores iniciales.', 'area-familias'));
             wp_safe_redirect(admin_url('admin.php?page=area-familias-reservas#servicio-' . $p['restablecer']));
             exit;
@@ -719,6 +754,10 @@ class AF_Reservas {
             $o['servicios'][$k] = $s;
         }
         update_option(self::OPTION, $o, false);
+        $sync = self::sincronizar(true);
+        if (is_wp_error($sync)) {
+            $errores[] = __('No se han podido enviar los servicios al Área de Profesores (Portería los usa para reservar):', 'area-familias') . ' ' . $sync->get_error_message();
+        }
         AF_Ajustes::flash($errores ? __('Guardado, pero revisa: ', 'area-familias') . implode(' ', $errores) : __('Reservas guardadas.', 'area-familias'), $errores ? 'warning' : 'success');
         wp_safe_redirect(admin_url('admin.php?page=area-familias-reservas'));
         exit;

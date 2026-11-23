@@ -15,7 +15,7 @@ $afr_prof = trailingslashit((string) AF_Ajustes::get('profesores_url'));
     <h1 class="af-title"><span class="af-badge"><?php esc_html_e('Área Familias', 'area-familias'); ?></span> <?php esc_html_e('Reservas de servicios', 'area-familias'); ?></h1>
     <p class="af-lead"><?php esc_html_e('Servicios que las familias pueden reservar en la opción "Reservar un servicio" de su panel. Eligen a su hijo o hija (o a varios), el servicio, el día o los días, y contestan sus preguntas. La reserva se guarda en el Área de Profesores, que avisa por correo al tutor/a, a Secretaría y a la familia.', 'area-familias'); ?></p>
     <p class="af-lead">
-        <?php esc_html_e('Las reservas se consultan en el Área de Profesores: en "Reservas de familias" (backend, por día, para imprimir o descargar), en la pestaña "Reservas" de cada tutor/a y en el listado de cocina. Los textos de los correos se cambian allí, en "Correos automáticos".', 'area-familias'); ?>
+        <?php esc_html_e('Las reservas se consultan en el Área de Profesores: en "Reservas de familias" (backend, por día, para imprimir o descargar), en la pestaña "Reservas" de cada tutor/a y en el listado de cocina. Los textos de los correos se cambian allí, en "Avisos".', 'area-familias'); ?>
         <?php if ($afr_prof !== '/') : ?>
             <a href="<?php echo esc_url($afr_prof . 'wp-admin/admin.php?page=area-profesores-reservas'); ?>" target="_blank" rel="noopener"><?php esc_html_e('Ver las reservas', 'area-familias'); ?> ↗</a>
         <?php endif; ?>

@@ -9,7 +9,7 @@
  * - The family chooses one or several children, the service and the day (or a
  *   range of days with weekdays) and answers its questions. The reservation is
  *   saved in the Área de Profesores, which e-mails the tutor/a, Secretaría and
- *   the family (Correos automáticos).
+ *   the family (Avisos del Área de Profesores).
  * - "Mis reservas": upcoming reservations of the account, which can be
  *   cancelled until the same deadline.
  */

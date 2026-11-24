@@ -275,7 +275,7 @@ class AF_Reservas {
         foreach (self::servicios() as $k => $sv) {
             $servicios[$k] = array_intersect_key($sv, array_flip(array('activo', 'nombre', 'icono', 'hora_inicio', 'hora_fin', 'precio', 'varios_dias', 'etapas', 'avisar', 'desayuno', 'dieta', 'recoge', 'tipos_dieta')));
         }
-        $datos = array('servicios' => $servicios, 'festivos' => array_keys(self::festivos_propios()));
+        $datos = array('servicios' => $servicios, 'festivos' => array_keys(self::festivos_propios()), 'panel_url' => self::panel_url());
         $hash = md5(wp_json_encode($datos));
         if (!$forzar && get_option('af_servicios_sync') === $hash) {
             return true;

@@ -70,6 +70,7 @@ $af_iniciales = function ($n) {
 .afp .afp-card + .afp-card { margin-top: 16px; }
 .afp .afp-h2 { margin: 0 0 4px; padding: 0; border: 0; font-family: inherit; font-size: 20px; font-weight: 800; color: var(--afp-navy); }
 .afp .afp-sub { margin: 0 0 18px; font-size: 14px; color: var(--afp-muted); }
+.afp .afp-pendiente { margin: 10px 0 0; padding: 10px 12px; border-radius: 12px; background: #fdf6ec; color: #7a4b0f; font-size: 14px; line-height: 1.45; }
 .afp .afp-hijos { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
 .afp .afp-hijo { border: 1px solid var(--afp-line); border-top: 4px solid var(--afp-navy); border-radius: 14px; padding: 18px; background: #fff; display: flex; flex-direction: column; gap: 10px; }
 .afp .afp-hijo-top { display: flex; align-items: center; gap: 12px; }
@@ -189,6 +190,11 @@ $af_iniciales = function ($n) {
                                     <div class="afp-hijo-curso"><?php echo esc_html(trim($h['curso_label'] . ($h['etapa'] ? ' · ' . $h['etapa'] : ''))); ?></div>
                                 </div>
                             </div>
+                            <?php if (!empty($h['pendiente'])) : ?>
+                                <p class="afp-pendiente">🎒 <?php echo !empty($h['incorporacion'])
+                                    ? sprintf(esc_html__('Se incorpora al colegio el %s. Ese día veréis aquí a su tutor/a y su espacio de aula, y podréis reservar servicios.', 'area-familias'), '<strong>' . esc_html(date_i18n('j \d\e F \d\e Y', strtotime($h['incorporacion'] . ' 12:00:00'))) . '</strong>')
+                                    : esc_html__('Todavía no ha empezado en el colegio. Cuando empiece veréis aquí a su tutor/a y su espacio de aula.', 'area-familias'); ?></p>
+                            <?php endif; ?>
                             <?php if (!empty($h['tutor']['nombre'])) : ?>
                                 <div class="afp-tutor">
                                     <span class="afp-av is-small" aria-hidden="true"><?php echo esc_html($h['tutor']['iniciales']); ?><?php if (!empty($h['tutor']['foto'])) : ?><img src="<?php echo esc_url($h['tutor']['foto']); ?>" alt="" loading="lazy" onerror="this.remove()"><?php endif; ?></span>

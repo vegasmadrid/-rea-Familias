@@ -2,7 +2,8 @@
 /**
  * Pantalla de acceso del Área Familias.
  *
- * Variables: $s (ajustes), $google_url, $domain, $error, $user, $start_url, $logout_url
+ * Variables: $s (ajustes), $google_url, $domain, $error, $user, $start_url, $logout_url,
+ *            $matricula_url (empty when the enrolment request is closed), $matricula_boton
  */
 
 if (!defined('ABSPATH')) {
@@ -61,6 +62,14 @@ html:has(.aflg), body:has(.aflg) { overflow-x: clip; }
 .aflg .aflg-domain span { display: inline-block; padding: 2px 10px; border-radius: 999px; background: #eef3fe; color: var(--aflg-navy); font-weight: 700; }
 .aflg .aflg-error { margin: 0 0 20px; padding: 12px 14px; border-radius: 12px; background: #fdf0ee; color: #9a2c1c; font-size: 14px; text-align: left; }
 .aflg .aflg-ok { margin: 0 0 18px; font-size: 15px; }
+.aflg .aflg-nueva { margin: 26px 0 0; padding-top: 20px; border-top: 1px solid var(--aflg-line); }
+.aflg .aflg-nueva p { margin: 0 0 10px; font-size: 14px; color: var(--aflg-muted); }
+.aflg a.aflg-btn-sec {
+    display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 13px 18px; border-radius: 999px;
+    border: 2px solid var(--aflg-orange); background: #fff; color: var(--aflg-navy); text-decoration: none;
+    font-family: inherit; font-size: 15px; font-weight: 700; line-height: 1.25;
+}
+.aflg a.aflg-btn-sec:hover, .aflg a.aflg-btn-sec:focus { background: #fdf6ec; color: var(--aflg-navy); }
 .aflg a.aflg-link { display: inline-block; margin-top: 16px; font-size: 13px; color: var(--aflg-muted); text-decoration: underline; }
 @media (max-width: 600px) {
     .aflg .aflg-logo { max-width: 110px; max-height: 70px; }
@@ -104,6 +113,15 @@ html:has(.aflg), body:has(.aflg) { overflow-x: clip; }
             </a>
             <?php if ($domain !== '') : ?>
                 <p class="aflg-domain"><?php esc_html_e('Solo con cuentas', 'area-familias'); ?> <span>@<?php echo esc_html($domain); ?></span></p>
+            <?php endif; ?>
+            <?php if (!empty($matricula_url)) : ?>
+                <div class="aflg-nueva">
+                    <p><?php esc_html_e('¿Todavía no tenéis cuenta del colegio?', 'area-familias'); ?></p>
+                    <a class="aflg-btn-sec" href="<?php echo esc_url($matricula_url); ?>">
+                        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path fill="currentColor" d="M15 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2Zm9 4c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4Z"/></svg>
+                        <?php echo esc_html($matricula_boton); ?>
+                    </a>
+                </div>
             <?php endif; ?>
         <?php endif; ?>
     </div>

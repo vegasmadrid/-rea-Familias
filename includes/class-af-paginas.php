@@ -30,6 +30,10 @@ class AF_Paginas {
         if ($login) {
             $map[$login] = array('AF_Login', 'render_static');
         }
+        $matricula = AF_Matricula::page_id();
+        if ($matricula && !isset($map[$matricula])) {
+            $map[$matricula] = array('AF_Matricula', 'render');
+        }
         $inicio = absint(AF_Ajustes::get('start_page_id'));
         if ($inicio && !isset($map[$inicio])) {
             $map[$inicio] = array('AF_Panel', 'render');

@@ -646,6 +646,8 @@ class AF_Matricula {
 
         $datos = $pend['datos'];
         $datos['origen']['verificado'] = current_time('d/m/Y H:i');
+        // Login page of this website: printed (with a QR code) on the credentials sheet.
+        $datos['familias_url'] = AF_Acceso::get_login_url();
         $r = AF_Panel::api('POST', '/matriculas', $datos);
         if (is_wp_error($r)) {
             error_log('[Área Familias] Matrícula: ' . $r->get_error_message());

@@ -48,7 +48,7 @@ Plugin de WordPress para el Área de Familias del Colegio Casa de la Virgen (`fa
 - En el navegador de la familia se guarda un borrador por si cierran la página (sin números de documento ni IBAN); se borra al terminar.
 - Ajustes: página del formulario, plazo abierto o cerrado, curso escolar (uno o varios), cursos que se pueden pedir, textos, enlace al Proyecto Educativo y al RRI, y los textos de **información del centro** y de **protección de datos** (transcritos de las hojas en papel; se pueden editar: `## ` título, `- ` lista, `**negrita**`; las líneas `[CONSENTIMIENTO_IMAGENES]` y `[CONSENTIMIENTO_AMPA]` son las casillas). Con cada solicitud se envía el texto exacto que la familia ha aceptado.
 - Cuando Secretaría completa la matrícula, la familia y sus hijos se dan de alta en el Área de Profesores. Si el alumno empieza más adelante, en **Mis hijos** sale con el aviso *«Se incorpora al colegio el …»* (sin tutor ni espacio de aula todavía) y no se le pueden reservar servicios hasta ese día.
-- Requiere el Área de Profesores 1.27.0 o posterior.
+- Requiere el Área de Profesores 1.28.0 o posterior.
 
 ## Instalación
 

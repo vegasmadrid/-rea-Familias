@@ -105,7 +105,7 @@ foreach ($niveles as $k => $n) {
                     <th scope="row"><label for="proteccion"><?php esc_html_e('Información sobre protección de datos', 'area-familias'); ?></label></th>
                     <td><textarea class="large-text code" rows="14" id="proteccion" name="proteccion"><?php echo esc_textarea($m['proteccion']); ?></textarea>
                         <p class="description"><?php esc_html_e('Texto de la Fundación (hoja «Información protección de datos alumnos – Ficha Matrícula»). Las líneas [CONSENTIMIENTO_IMAGENES] y [CONSENTIMIENTO_AMPA] son las casillas «Consiento / No consiento»: si quitas una, ya no se pregunta.', 'area-familias'); ?></p>
-                        <p class="description"><?php esc_html_e('Formato: una línea por párrafo; «## » al principio para un título, «- » para una lista y **texto** para negrita. Si vacías el cuadro y guardas, vuelve el texto original.', 'area-familias'); ?></p></td>
+                        <p class="description"><?php esc_html_e('Formato: una línea por párrafo; «## » al principio para un título, «- » para una lista, «-- » para un guion dentro de un apartado (nunca sale como casilla) y **texto** para negrita. Si vacías el cuadro y guardas, vuelve el texto original.', 'area-familias'); ?></p></td>
                 </tr>
                 <tr>
                     <th scope="row"><label for="email_titulo"><?php esc_html_e('Asunto del correo con el código', 'area-familias'); ?></label></th>

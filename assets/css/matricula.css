@@ -145,3 +145,4 @@ html:has(.afm), body:has(.afm) { overflow-x: clip; }
 .afm .afm-manif .afm-radios legend { font-weight: 400; font-size: 14px; margin-bottom: 6px; }
 .afm .afm-manif > label { font-weight: 400; }
 .afm .afm-opcional { color: var(--afm-muted); font-size: 13px; }
+.afm .afm-texto li.sub { padding-left: 18px; }

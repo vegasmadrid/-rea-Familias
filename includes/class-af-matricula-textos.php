@@ -11,6 +11,7 @@
  * Simple format of the texts (one paragraph per line):
  *   ## Título        heading
  *   - texto          item of a list
+ *   -- texto         sub-item (printed with a dash, never a box)
  *   **negrita**      bold
  *   [CONSENTIMIENTO_IMAGENES] / [CONSENTIMIENTO_AMPA]   where the "Consiento / No consiento" boxes go
  */
@@ -24,7 +25,7 @@ class AF_Matricula_Textos {
     /** Consent boxes of the data-protection sheet: marker => form field and label. */
     public static function consentimientos() {
         return array(
-            'CONSENTIMIENTO_IMAGENES' => array('campo' => 'rgpd_imagenes', 'label' => __('Publicación de imágenes y nombres de los alumnos (apartado f)', 'area-familias')),
+            'CONSENTIMIENTO_IMAGENES' => array('campo' => 'rgpd_imagenes', 'label' => __('Publicación de imágenes y nombres de los alumnos (apartados e y f)', 'area-familias')),
             'CONSENTIMIENTO_AMPA'     => array('campo' => 'rgpd_ampa', 'label' => __('Cesión de datos al AMPA (apartado 3)', 'area-familias')),
         );
     }
@@ -77,7 +78,10 @@ TXT;
 - b) Atención, evaluación y seguimiento académico del alumno.
 - c) Correcta atención al alumno en relación con los datos de salud facilitados.
 - d) Toma de imágenes para uso interno (incluida la elaboración de material pedagógico).
-- e) Publicación de imágenes de los alumnos tomadas en diferentes actos y eventos (incluidas actividades extraescolares y salidas) y/o sus nombres y apellidos con fines informativos o publicitarios siempre que dicha difusión no suponga ni pueda implicar menoscabo de su honra o reputación o que sea contraria a sus intereses ni intromisión ilegítima a la intimidad o reputación del alumno en: la página web, así como como en YouTube, Twitter, Facebook, Instagram, y/o en otras redes sociales, blogs; orlas y reportajes; anuarios, libros conmemorativos y/o revistas del centro.
+- e) Publicación de imágenes de los alumnos tomadas en diferentes actos y eventos (incluidas actividades extraescolares y salidas) y/o sus nombres y apellidos con fines informativos o publicitarios siempre que dicha difusión no suponga ni pueda implicar menoscabo de su honra o reputación o que sea contraria a sus intereses ni intromisión ilegítima a la intimidad o reputación del alumno en:
+-- la página web, así como como en YouTube, Twitter, Facebook, Instagram, y/o en otras redes sociales, blogs
+-- orlas y reportajes
+-- anuarios, libros conmemorativos y/o revistas del centro.
 - f) Publicación de imágenes de los alumnos tomadas en diferentes actos y eventos (incluidas actividades extraescolares y salidas) y/o sus nombres y apellidos en la página web, en reportajes, anuarios, blogs y/o revistas del centro, así como en libros conmemorativos, u cualquier otro uso dentro del contexto escolar y obtenidas y difundidas por los medios de comunicación, así como como en YouTube, TikTok, Facebook, Instagram, y/o en otras redes sociales y otros medios de comunicación externos, con fines informativos o publicitarios siempre que dicha difusión no suponga ni pueda implicar menoscabo de su honra o reputación o que sea contraria a sus intereses ni intromisión ilegítima a la intimidad o reputación del alumno.
 [CONSENTIMIENTO_IMAGENES]
 **Legitimación del tratamiento:** Ley educativa vigente para el tratamiento de los datos en el ejercicio de la función educativa. También están legitimados para el desarrollo y ejecución de la relación jurídica que se produce con la matriculación del alumno, así como por el consentimiento del interesado.
@@ -121,7 +125,8 @@ TXT;
         };
         foreach (preg_split('/\r\n|\r|\n/', (string) $texto) as $l) {
             $l = trim($l);
-            $es_item = strpos($l, '- ') === 0;
+            $es_sub = strpos($l, '-- ') === 0;
+            $es_item = $es_sub || strpos($l, '- ') === 0;
             if ($lista && !$es_item) {
                 $out .= '</ul>';
                 $lista = false;
@@ -138,7 +143,7 @@ TXT;
                     $out .= '<ul>';
                     $lista = true;
                 }
-                $out .= '<li>' . $inline(substr($l, 2)) . '</li>';
+                $out .= $es_sub ? '<li class="sub">– ' . $inline(substr($l, 3)) . '</li>' : '<li>' . $inline(substr($l, 2)) . '</li>';
             } else {
                 $out .= '<p>' . $inline($l) . '</p>';
             }

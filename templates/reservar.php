@@ -101,6 +101,8 @@ foreach ($afr_todos as $k => $s) {
     <?php if (!$servicios) : ?>
         <span class="afp-pronto"><?php esc_html_e('Muy pronto', 'area-familias'); ?></span>
         <p class="afp-vacio"><?php esc_html_e('Ahora mismo no hay servicios disponibles para reservar desde aquí.', 'area-familias'); ?></p>
+    <?php elseif (!$hijos && !empty($hijos_pendientes)) : ?>
+        <p class="afp-vacio"><?php esc_html_e('Podréis reservar servicios cuando vuestro hijo o hija empiece en el colegio (la fecha está en «Mis hijos»).', 'area-familias'); ?></p>
     <?php elseif (!$hijos) : ?>
         <p class="afp-vacio"><?php esc_html_e('No encontramos alumnos asociados a tu cuenta.', 'area-familias'); ?></p>
     <?php else : ?>

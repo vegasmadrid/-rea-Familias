@@ -577,7 +577,7 @@ class AF_Reservas {
         if (is_wp_error($familia) || empty($familia['hijos'])) {
             self::back('error', is_wp_error($familia) ? $familia->get_error_message() : __('No encontramos alumnos asociados a tu cuenta.', 'area-familias'), $post);
         }
-        $datos = self::validar($post, $familia['hijos']);
+        $datos = self::validar($post, self::hijos_reservables($familia['hijos']));
         if (is_wp_error($datos)) {
             self::back('error', $datos->get_error_message(), $post);
         }
@@ -638,7 +638,20 @@ class AF_Reservas {
      * @param array $hijos children of the family (API)
      * @return array { html, proximas }
      */
+    /**
+     * Only the children who have already started can book services (the ones
+     * "pendientes de incorporación" from the online enrolment cannot yet).
+     */
+    public static function hijos_reservables($hijos) {
+        return array_values(array_filter((array) $hijos, function ($h) {
+            return empty($h['pendiente']);
+        }));
+    }
+
     public static function render_seccion($hijos, $user) {
+        $todos_hijos = (array) $hijos;
+        $hijos = self::hijos_reservables($hijos);
+        $hijos_pendientes = count($todos_hijos) - count($hijos);
         $servicios = self::activos();
         $gen = self::generales();
         $reservas = $servicios ? self::get_reservas($user->user_email) : array();

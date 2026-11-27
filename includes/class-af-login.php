@@ -2,7 +2,8 @@
 /**
  * Pantalla de acceso del Área Familias (inyectada en la página de login).
  * Google button of Nextend Social Login (without the Google logo) and the
- * reminder that only @casadelavirgen.es accounts can enter.
+ * reminder that only @casadelavirgen.es accounts can enter. New families see a
+ * button to the online enrolment request (AF_Matricula) while it is open.
  */
 
 if (!defined('ABSPATH')) {
@@ -51,6 +52,9 @@ class AF_Login {
         $user = is_user_logged_in() ? wp_get_current_user() : null;
         $start_url = AF_Acceso::get_start_url();
         $logout_url = AF_Acceso::get_logout_url();
+        // New families (without an account yet): button to the enrolment request.
+        $matricula_url = AF_Matricula::url_boton_login();
+        $matricula_boton = (string) AF_Matricula::get('boton_login');
 
         ob_start();
         include AREA_FAMILIAS_DIR . 'templates/login.php';

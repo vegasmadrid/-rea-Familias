@@ -38,6 +38,18 @@ Plugin de WordPress para el Área de Familias del Colegio Casa de la Virgen (`fa
 - Las reservas se guardan en el Área de Profesores, que envía los correos (tutor/a, Secretaría y confirmación a la familia; textos en sus *Avisos*) y las muestra en su backend, en la pestaña *Reservas* de cada tutor/a y en el listado de cocina.
 - **Portería** puede reservar desde el Área de Profesores cualquier servicio para cualquier familia (cuando lo piden en persona o por teléfono). Para que use los mismos servicios, horarios y preguntas, esta web le envía la configuración de los servicios y los días sin clase al guardar *Reservas de servicios* (y cada hora, si algo ha cambiado). Esas reservas aparecen también en el panel de la familia, con *Reservada por: Portería*. Requiere el Área de Profesores 1.15.0 o posterior.
 
+### Nuevas familias: solicitud de matrícula online (Área Familias › Nuevas familias)
+- Las familias que todavía **no tienen cuenta del colegio** ven en la pantalla de acceso el botón *«¿Sois una familia nueva? Solicitad aquí la matrícula»* (solo mientras el plazo está abierto).
+- Lleva a una **página pública** (aunque esté activado *Restringir toda la web*) con el formulario por pasos de las tres hojas de papel: **alumnos** (varios hermanos a la vez; el curso se propone solo por el año de nacimiento), **padres o tutores**, **residencia y familia** (convivientes, hermanos en el centro, padres separados que necesitan dos cuentas), **datos económicos SEPA** (o pago por ventanilla), **información y autorizaciones** y envío.
+- Paso *Información y autorizaciones*: la hoja **«Información del centro a la familia»** (apartados A–G), las **manifestaciones de los padres/tutores** (1º, 2º y 5º se aceptan; 3º actividades complementarias y 4º imágenes se eligen *sí/no*; 6º otras manifestaciones, texto libre) y la **información de protección de datos** de la Fundación con sus casillas *Consiento / No consiento* (publicación de imágenes y cesión al AMPA). Lo que marcan se imprime en Secretaría en las hojas para firmar.
+- Se comprueban la letra del **DNI/NIE**, los dígitos de control del **IBAN**, fechas, teléfonos y códigos postales (en el navegador y otra vez en el servidor). Funciona también sin JavaScript.
+- La familia **confirma su correo con un código de 6 números** (caduca en una hora; 5 intentos; se puede pedir otro). Hay un campo trampa contra robots y un límite de envíos por conexión.
+- Al confirmar, la solicitud se envía al **Área de Profesores** (pestaña *Nuevas familias*), que la guarda cifrada y avisa a Secretaría, Dirección y Administración y a la familia. **En esta web no se guarda nada** una vez enviada.
+- En el navegador de la familia se guarda un borrador por si cierran la página (sin números de documento ni IBAN); se borra al terminar.
+- Ajustes: página del formulario, plazo abierto o cerrado, curso escolar (uno o varios), cursos que se pueden pedir, textos, enlace al Proyecto Educativo y al RRI, y los textos de **información del centro** y de **protección de datos** (transcritos de las hojas en papel; se pueden editar: `## ` título, `- ` lista, `**negrita**`; las líneas `[CONSENTIMIENTO_IMAGENES]` y `[CONSENTIMIENTO_AMPA]` son las casillas). Con cada solicitud se envía el texto exacto que la familia ha aceptado.
+- Cuando Secretaría completa la matrícula, la familia y sus hijos se dan de alta en el Área de Profesores. Si el alumno empieza más adelante, en **Mis hijos** sale con el aviso *«Se incorpora al colegio el …»* (sin tutor ni espacio de aula todavía) y no se le pueden reservar servicios hasta ese día.
+- Requiere el Área de Profesores 1.28.0 o posterior.
+
 ## Instalación
 
 1. Sube la carpeta del plugin a `wp-content/plugins/area-familias` y actívalo.
@@ -45,6 +57,7 @@ Plugin de WordPress para el Área de Familias del Colegio Casa de la Virgen (`fa
 3. En **Área Familias › Ajustes** elige la página de login y la de inicio.
 4. En el **Área de Profesores** (versión 1.6.0 o posterior): *Área Profesores › Espacios de Chat › Conexión con el Área Familias* › **Activar y generar clave**.
 5. En **Área Familias › Espacios de aula** pega la dirección del Área de Profesores y la clave y pulsa **Guardar y comprobar la conexión**.
+6. Para la matrícula online: crea una página vacía (p. ej. *Matrícula*), elígela en **Área Familias › Nuevas familias**, revisa los textos y marca **Plazo abierto**.
 
 ## Conexión con el Área de Profesores
 

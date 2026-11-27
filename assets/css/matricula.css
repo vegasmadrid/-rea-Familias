@@ -128,3 +128,20 @@ html:has(.afm), body:has(.afm) { overflow-x: clip; }
     .afm .afm-fila .afm-quitar { justify-self: start; margin-bottom: 8px; }
     .afm .afm-nav .afm-btn { padding: 12px 18px; }
 }
+
+/* Información del centro y protección de datos */
+.afm .afm-texto { max-height: 340px; overflow-y: auto; border: 1.5px solid var(--afm-line); border-radius: 14px; padding: 6px 16px 10px; background: var(--afm-bg); font-size: 14px; line-height: 1.55; margin: 0 0 14px; }
+.afm .afm-texto:focus { outline: 3px solid rgba(114, 167, 247, .45); }
+.afm .afm-texto h4 { font-family: inherit; font-size: 15px; font-weight: 800; color: var(--afm-navy); margin: 12px 0 4px; text-transform: none; letter-spacing: 0; }
+.afm .afm-texto p { margin: 0 0 8px; }
+.afm .afm-texto ul { margin: 0 0 8px; padding-left: 10px; list-style: none; }
+.afm .afm-texto-rgpd { max-height: 420px; font-size: 13px; }
+.afm .afm-consentimiento { margin: 8px 0 12px; padding: 10px 14px; border: 2px solid var(--afm-orange); border-radius: 12px; background: #fff; }
+.afm .afm-consentimiento legend { font-size: 14px; }
+.afm .afm-manif { border-bottom: 1px solid var(--afm-line); padding: 8px 0 10px; margin: 0; font-size: 14px; }
+.afm .afm-manif .afm-check { font-size: 14px; margin: 0; }
+.afm .afm-manif .afm-check p, .afm .afm-manif .afm-check ul { margin: 0 0 4px; }
+.afm .afm-manif .afm-check ul { padding-left: 18px; }
+.afm .afm-manif .afm-radios legend { font-weight: 400; font-size: 14px; margin-bottom: 6px; }
+.afm .afm-manif > label { font-weight: 400; }
+.afm .afm-opcional { color: var(--afm-muted); font-size: 13px; }

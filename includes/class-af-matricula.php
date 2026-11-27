@@ -63,8 +63,8 @@ class AF_Matricula {
             'intro'            => 'Rellenad este formulario para solicitar la matrícula en el Colegio Casa de la Virgen. Son los mismos datos que las hojas en papel: cuando Secretaría lo revise, os avisará para venir a firmar la ficha impresa y traer la documentación original (libro de familia y DNI/NIE/pasaporte de los padres o tutores).',
             'cerrado'          => 'Ahora mismo no está abierto el plazo de matrícula online. Para cualquier duda, llamad a Secretaría: 914041786.',
             'ideario_url'      => '',
-            'privacidad'       => "Responsable: Colegio Casa de la Virgen (C/ Virgen del Val, 1 · 28027 Madrid).\nFinalidad: gestionar la solicitud de matrícula del alumno/a y, si se formaliza, su escolarización, la relación con la familia y los cobros de los servicios.\nLegitimación: la solicitud de la familia y las obligaciones legales del centro educativo.\nDestinatarios: las administraciones educativas cuando lo exija la ley y la entidad bancaria para los recibos domiciliados.\nDerechos: podéis acceder, rectificar y suprimir vuestros datos, entre otros derechos, escribiendo a Secretaría.",
-            'preguntar_imagen' => 'yes',
+            'info_centro'      => AF_Matricula_Textos::info_centro(),
+            'proteccion'       => AF_Matricula_Textos::proteccion(),
             'email_titulo'     => 'Código para confirmar la solicitud de matrícula',
         );
     }
@@ -453,18 +453,42 @@ class AF_Matricula {
             $e['email_contacto'] = __('Escribe un correo válido: os enviaremos un código para confirmarlo.', 'area-familias');
         }
         $ahora = current_time('d/m/Y H:i');
-        if (empty($p['acepto_ideario'])) {
-            $e['acepto_ideario'] = __('Hay que aceptar el Ideario y el Reglamento de Régimen Interior.', 'area-familias');
-        }
-        if (empty($p['acepto_privacidad'])) {
-            $e['acepto_privacidad'] = __('Hay que aceptar la información sobre protección de datos.', 'area-familias');
-        }
-        $imagen = '';
-        if (self::get('preguntar_imagen') === 'yes') {
-            $imagen = $txt($p, 'imagen', 3);
-            if (!in_array($imagen, array('si', 'no'), true)) {
-                $e['imagen'] = __('Indicad si autorizáis o no el uso de la imagen.', 'area-familias');
+
+        // Manifestaciones de los padres/tutores (hoja "Información del centro a la familia").
+        $mp = isset($p['manif']) && is_array($p['manif']) ? $p['manif'] : array();
+        $manif = array();
+        foreach (AF_Matricula_Textos::manifestaciones() as $k => $mf) {
+            $campo = 'manif[' . $k . ']';
+            if ($mf['tipo'] === 'acepta') {
+                if (empty($mp[$k])) {
+                    $e[$campo] = sprintf(__('Hay que aceptar la manifestación %s.', 'area-familias'), $mf['n']);
+                }
+                $manif[$k] = 'si';
+            } elseif ($mf['tipo'] === 'eleccion') {
+                $v = $txt($mp, $k, 2);
+                if (!in_array($v, array('si', 'no'), true)) {
+                    $e[$campo] = __('Elegid una de las dos opciones.', 'area-familias');
+                }
+                $manif[$k] = $v;
+            } else {
+                $manif[$k] = isset($mp[$k]) && is_scalar($mp[$k]) ? mb_substr(sanitize_textarea_field((string) $mp[$k]), 0, 2000) : '';
             }
+        }
+
+        // Protección de datos: read, and the consent boxes that the text has.
+        $proteccion = (string) self::get('proteccion');
+        if (empty($p['proteccion_leida'])) {
+            $e['proteccion_leida'] = __('Hay que leer y aceptar la información sobre protección de datos.', 'area-familias');
+        }
+        $rgpd = array();
+        $cons = AF_Matricula_Textos::consentimientos();
+        foreach (AF_Matricula_Textos::marcas($proteccion) as $marca) {
+            $c = $cons[$marca]['campo'];
+            $v = $txt($p, $c, 10);
+            if (!in_array($v, array('consiento', 'no'), true)) {
+                $e[$c] = __('Marcad «Consiento» o «No consiento».', 'area-familias');
+            }
+            $rgpd[$c] = $v;
         }
 
         $datos = array(
@@ -478,7 +502,20 @@ class AF_Matricula {
             'pago'          => $pago,
             'email_contacto'=> $email,
             'observaciones' => isset($p['observaciones']) && is_scalar($p['observaciones']) ? mb_substr(sanitize_textarea_field((string) $p['observaciones']), 0, 2000) : '',
-            'aceptaciones'  => array('ideario' => $ahora, 'privacidad' => $ahora, 'imagen' => $imagen),
+            'aceptaciones'  => array(
+                'ideario'         => $ahora,
+                'privacidad'      => $ahora,
+                'imagen'          => isset($manif['m4']) ? $manif['m4'] : '',
+                'manifestaciones' => $manif,
+                'rgpd'            => $rgpd,
+            ),
+            // The exact texts the family accepted (printed with its answers in Secretaría).
+            'textos'        => array(
+                'info_centro'     => (string) self::get('info_centro'),
+                'manifestaciones' => AF_Matricula_Textos::manifestaciones(),
+                'proteccion'      => $proteccion,
+                'consentimientos' => $cons,
+            ),
         );
         return array($datos, $e);
     }
@@ -686,8 +723,8 @@ class AF_Matricula {
             'intro'            => $area('intro'),
             'cerrado'          => $area('cerrado'),
             'ideario_url'      => isset($p['ideario_url']) ? esc_url_raw($p['ideario_url']) : '',
-            'privacidad'       => $area('privacidad'),
-            'preguntar_imagen' => !empty($p['preguntar_imagen']) ? 'yes' : 'no',
+            'info_centro'      => trim($area('info_centro')) !== '' ? $area('info_centro') : AF_Matricula_Textos::info_centro(),
+            'proteccion'       => trim($area('proteccion')) !== '' ? $area('proteccion') : AF_Matricula_Textos::proteccion(),
             'email_titulo'     => $txt('email_titulo') !== '' ? $txt('email_titulo') : self::defaults()['email_titulo'],
         );
         $elegidos = isset($p['niveles']) ? array_map('strval', (array) $p['niveles']) : array();

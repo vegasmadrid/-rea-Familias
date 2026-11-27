@@ -92,18 +92,20 @@ foreach ($niveles as $k => $n) {
             <h2><span class="dashicons dashicons-shield"></span> <?php esc_html_e('Aceptaciones y protección de datos', 'area-familias'); ?></h2>
             <table class="form-table" role="presentation">
                 <tr>
-                    <th scope="row"><label for="ideario_url"><?php esc_html_e('Enlace al Ideario y al RRI', 'area-familias'); ?></label></th>
+                    <th scope="row"><label for="ideario_url"><?php esc_html_e('Enlace al Proyecto Educativo y al RRI', 'area-familias'); ?></label></th>
                     <td><input type="url" class="large-text" id="ideario_url" name="ideario_url" value="<?php echo esc_attr($m['ideario_url']); ?>" placeholder="https://">
-                        <p class="description"><?php esc_html_e('Opcional: sale un enlace «Leer» junto a la casilla de aceptación.', 'area-familias'); ?></p></td>
+                        <p class="description"><?php esc_html_e('Opcional: sale un enlace encima de las manifestaciones.', 'area-familias'); ?></p></td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="privacidad"><?php esc_html_e('Información sobre protección de datos', 'area-familias'); ?></label></th>
-                    <td><textarea class="large-text" rows="7" id="privacidad" name="privacidad"><?php echo esc_textarea($m['privacidad']); ?></textarea>
-                        <p class="description"><strong><?php esc_html_e('Es un texto de ejemplo: pedid que lo revise el delegado de protección de datos del colegio antes de abrir el plazo.', 'area-familias'); ?></strong></p></td>
+                    <th scope="row"><label for="info_centro"><?php esc_html_e('Información del centro a la familia', 'area-familias'); ?></label></th>
+                    <td><textarea class="large-text code" rows="10" id="info_centro" name="info_centro"><?php echo esc_textarea($m['info_centro']); ?></textarea>
+                        <p class="description"><?php esc_html_e('Apartados A–G de la hoja. Las «Manifestaciones de los padres/tutores» (1º–6º) van fijas en el formulario porque cada una es una pregunta.', 'area-familias'); ?></p></td>
                 </tr>
                 <tr>
-                    <th scope="row"><?php esc_html_e('Uso de la imagen', 'area-familias'); ?></th>
-                    <td><label><input type="checkbox" name="preguntar_imagen" value="1" <?php checked($m['preguntar_imagen'], 'yes'); ?>> <?php esc_html_e('Preguntar si autorizan el uso de la imagen de sus hijos', 'area-familias'); ?></label></td>
+                    <th scope="row"><label for="proteccion"><?php esc_html_e('Información sobre protección de datos', 'area-familias'); ?></label></th>
+                    <td><textarea class="large-text code" rows="14" id="proteccion" name="proteccion"><?php echo esc_textarea($m['proteccion']); ?></textarea>
+                        <p class="description"><?php esc_html_e('Texto de la Fundación (hoja «Información protección de datos alumnos – Ficha Matrícula»). Las líneas [CONSENTIMIENTO_IMAGENES] y [CONSENTIMIENTO_AMPA] son las casillas «Consiento / No consiento»: si quitas una, ya no se pregunta.', 'area-familias'); ?></p>
+                        <p class="description"><?php esc_html_e('Formato: una línea por párrafo; «## » al principio para un título, «- » para una lista y **texto** para negrita. Si vacías el cuadro y guardas, vuelve el texto original.', 'area-familias'); ?></p></td>
                 </tr>
                 <tr>
                     <th scope="row"><label for="email_titulo"><?php esc_html_e('Asunto del correo con el código', 'area-familias'); ?></label></th>

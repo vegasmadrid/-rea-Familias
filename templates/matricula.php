@@ -241,7 +241,8 @@ $bloque_hermano = function ($i) use ($campo) {
             <li data-ir="2"><?php esc_html_e('Padres o tutores', 'area-familias'); ?></li>
             <li data-ir="3"><?php esc_html_e('Domicilio', 'area-familias'); ?></li>
             <li data-ir="4"><?php esc_html_e('Pago', 'area-familias'); ?></li>
-            <li data-ir="5"><?php esc_html_e('Enviar', 'area-familias'); ?></li>
+            <li data-ir="5"><?php esc_html_e('Información', 'area-familias'); ?></li>
+            <li data-ir="6"><?php esc_html_e('Enviar', 'area-familias'); ?></li>
         </ol>
 
         <form class="afm-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" novalidate
@@ -328,32 +329,71 @@ $bloque_hermano = function ($i) use ($campo) {
                 </div>
             </section>
 
-            <!-- 5. Enviar -->
+            <!-- 5. Información del centro y protección de datos -->
             <section class="afm-paso" data-paso="5">
-                <h2><span>5</span> <?php esc_html_e('Revisar y enviar', 'area-familias'); ?></h2>
+                <h2><span>5</span> <?php esc_html_e('Información y autorizaciones', 'area-familias'); ?></h2>
+                <p class="afm-help"><?php esc_html_e('Leed con calma la información del centro y la de protección de datos. Lo que marquéis aquí se imprime en las hojas que firmaréis en Secretaría.', 'area-familias'); ?></p>
+
+                <h3><?php esc_html_e('Información del centro a la familia', 'area-familias'); ?></h3>
+                <div class="afm-texto" tabindex="0" role="region" aria-label="<?php esc_attr_e('Información del centro a la familia', 'area-familias'); ?>">
+                    <?php echo AF_Matricula_Textos::html($m['info_centro']); // phpcs:ignore -- escaped inside ?>
+                </div>
+
+                <h3><?php esc_html_e('Manifestaciones de los padres/tutores', 'area-familias'); ?></h3>
+                <?php if (!empty($m['ideario_url'])) : ?>
+                    <p class="afm-help"><a href="<?php echo esc_url($m['ideario_url']); ?>" target="_blank" rel="noopener"><?php esc_html_e('Consultar el Proyecto Educativo y el Reglamento de Régimen Interior', 'area-familias'); ?></a></p>
+                <?php endif; ?>
+                <?php foreach (AF_Matricula_Textos::manifestaciones() as $mk => $mf) : $mn = 'manif[' . $mk . ']'; $me = $err($mn); ?>
+                    <div class="afm-campo afm-manif<?php echo $me !== '' ? ' has-error' : ''; ?>">
+                        <?php if ($mf['tipo'] === 'acepta') : ?>
+                            <label class="afm-check"><input type="checkbox" name="<?php echo esc_attr($mn); ?>" value="1" required <?php checked($val($mn) === '1'); ?>>
+                                <span><strong><?php echo esc_html($mf['n']); ?></strong> <?php echo AF_Matricula_Textos::html($mf['texto']); // phpcs:ignore ?> <span class="afm-req">*</span></span></label>
+                        <?php elseif ($mf['tipo'] === 'eleccion') : ?>
+                            <fieldset class="afm-radios">
+                                <legend><strong><?php echo esc_html($mf['n']); ?></strong> <?php echo esc_html($mf['texto']); ?> <span class="afm-req">*</span></legend>
+                                <label><input type="radio" name="<?php echo esc_attr($mn); ?>" value="si" required <?php checked($val($mn), 'si'); ?>> <?php echo esc_html($mf['si']); ?></label>
+                                <label><input type="radio" name="<?php echo esc_attr($mn); ?>" value="no" required <?php checked($val($mn), 'no'); ?>> <?php echo esc_html($mf['no']); ?></label>
+                            </fieldset>
+                        <?php else : ?>
+                            <label for="afm-<?php echo esc_attr($mk); ?>"><strong><?php echo esc_html($mf['n']); ?></strong> <?php echo esc_html($mf['texto']); ?> <span class="afm-opcional"><?php esc_html_e('(opcional)', 'area-familias'); ?></span></label>
+                            <textarea id="afm-<?php echo esc_attr($mk); ?>" name="<?php echo esc_attr($mn); ?>" rows="3" maxlength="2000"><?php echo esc_textarea($val($mn)); ?></textarea>
+                        <?php endif; ?>
+                        <small class="afm-error" role="alert"><?php echo esc_html($me); ?></small>
+                    </div>
+                <?php endforeach; ?>
+
+                <h3><?php esc_html_e('Protección de datos (Fundación Casa de la Virgen)', 'area-familias'); ?></h3>
+                <?php $ap_cons = AF_Matricula_Textos::consentimientos(); ?>
+                <div class="afm-texto afm-texto-rgpd" tabindex="0" role="region" aria-label="<?php esc_attr_e('Información sobre protección de datos', 'area-familias'); ?>">
+                    <?php
+                    echo AF_Matricula_Textos::html($m['proteccion'], function ($marca) use ($ap_cons, $val, $err) { // phpcs:ignore
+                        if (!isset($ap_cons[$marca])) {
+                            return '';
+                        }
+                        $c = $ap_cons[$marca]['campo'];
+                        $e = $err($c);
+                        return '<div class="afm-campo afm-consentimiento' . ($e !== '' ? ' has-error' : '') . '"><fieldset class="afm-radios"><legend>' . esc_html($ap_cons[$marca]['label']) . ' <span class="afm-req">*</span></legend>'
+                            . '<label><input type="radio" name="' . esc_attr($c) . '" value="consiento" required' . checked($val($c), 'consiento', false) . '> ' . esc_html__('Consiento', 'area-familias') . '</label>'
+                            . '<label><input type="radio" name="' . esc_attr($c) . '" value="no" required' . checked($val($c), 'no', false) . '> ' . esc_html__('No consiento', 'area-familias') . '</label>'
+                            . '</fieldset><small class="afm-error" role="alert">' . esc_html($e) . '</small></div>';
+                    });
+                    ?>
+                </div>
+                <div class="afm-campo<?php echo $err('proteccion_leida') !== '' ? ' has-error' : ''; ?>">
+                    <label class="afm-check"><input type="checkbox" name="proteccion_leida" value="1" required <?php checked($val('proteccion_leida') === '1'); ?>> <span><?php esc_html_e('He leído la información sobre protección de datos.', 'area-familias'); ?> <span class="afm-req">*</span></span></label>
+                    <small class="afm-error" role="alert"><?php echo esc_html($err('proteccion_leida')); ?></small>
+                </div>
+            </section>
+
+            <!-- 6. Enviar -->
+            <section class="afm-paso" data-paso="6">
+                <h2><span>6</span> <?php esc_html_e('Revisar y enviar', 'area-familias'); ?></h2>
                 <div class="afm-resumen" data-resumen hidden></div>
                 <?php
                 $campo('email_contacto', __('Correo electrónico de contacto', 'area-familias'), array('type' => 'email', 'attrs' => 'autocomplete="email" data-email-contacto', 'help' => __('Aquí os enviaremos un código para confirmar la solicitud y los avisos de Secretaría.', 'area-familias')));
-                $campo('observaciones', __('Observaciones (opcional)', 'area-familias'), array('type' => 'textarea', 'req' => false));
-                if ($m['preguntar_imagen'] === 'yes') {
-                    $campo('imagen', __('¿Autorizáis el uso de la imagen de vuestros hijos en las publicaciones y la web del colegio?', 'area-familias'), array('type' => 'radio', 'opts' => array('si' => __('Sí, lo autorizamos', 'area-familias'), 'no' => __('No lo autorizamos', 'area-familias'))));
-                }
+                $campo('observaciones', __('Observaciones para Secretaría (opcional)', 'area-familias'), array('type' => 'textarea', 'req' => false));
                 ?>
-                <div class="afm-campo<?php echo $err('acepto_ideario') !== '' ? ' has-error' : ''; ?>">
-                    <label class="afm-check"><input type="checkbox" name="acepto_ideario" value="1" required <?php checked($val('acepto_ideario') === '1'); ?>>
-                        <span><?php esc_html_e('El colegio Casa de la Virgen es un centro de inspiración cristiana y católica. Aceptamos voluntariamente su Ideario y el Reglamento de Régimen Interior.', 'area-familias'); ?>
-                        <?php if (!empty($m['ideario_url'])) : ?> <a href="<?php echo esc_url($m['ideario_url']); ?>" target="_blank" rel="noopener"><?php esc_html_e('Leer', 'area-familias'); ?></a><?php endif; ?> <span class="afm-req">*</span></span></label>
-                    <small class="afm-error" role="alert"><?php echo esc_html($err('acepto_ideario')); ?></small>
-                </div>
-                <details class="afm-privacidad">
-                    <summary><?php esc_html_e('Información sobre protección de datos', 'area-familias'); ?></summary>
-                    <div><?php echo wp_kses_post(wpautop(esc_html($m['privacidad']))); ?></div>
-                </details>
-                <div class="afm-campo<?php echo $err('acepto_privacidad') !== '' ? ' has-error' : ''; ?>">
-                    <label class="afm-check"><input type="checkbox" name="acepto_privacidad" value="1" required <?php checked($val('acepto_privacidad') === '1'); ?>> <span><?php esc_html_e('He leído la información sobre protección de datos y declaro que los datos son ciertos.', 'area-familias'); ?> <span class="afm-req">*</span></span></label>
-                    <small class="afm-error" role="alert"><?php echo esc_html($err('acepto_privacidad')); ?></small>
-                </div>
-                <p class="afm-help"><?php esc_html_e('Al pulsar «Enviar» os mandaremos un código a vuestro correo. La matrícula no queda formalizada hasta que firméis la ficha en Secretaría.', 'area-familias'); ?></p>
+                <p class="afm-help"><?php esc_html_e('Al pulsar «Enviar» os mandaremos un código a vuestro correo. La matrícula no queda formalizada hasta que firméis en Secretaría las hojas impresas con estos datos.', 'area-familias'); ?></p>
                 <button type="submit" class="afm-btn"><?php esc_html_e('Enviar la solicitud', 'area-familias'); ?></button>
             </section>
 

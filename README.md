@@ -40,13 +40,14 @@ Plugin de WordPress para el Área de Familias del Colegio Casa de la Virgen (`fa
 
 ### Nuevas familias: solicitud de matrícula online (Área Familias › Nuevas familias)
 - Las familias que todavía **no tienen cuenta del colegio** ven en la pantalla de acceso el botón *«¿Sois una familia nueva? Solicitad aquí la matrícula»* (solo mientras el plazo está abierto).
-- Lleva a una **página pública** (aunque esté activado *Restringir toda la web*) con el formulario por pasos de las tres hojas de papel: **alumnos** (varios hermanos a la vez; el curso se propone solo por el año de nacimiento), **padres o tutores**, **residencia y familia** (convivientes, hermanos en el centro, padres separados que necesitan dos cuentas), **datos económicos SEPA** (o pago por ventanilla) y **aceptaciones** (Ideario y RRI, protección de datos y, si se activa, uso de la imagen).
+- Lleva a una **página pública** (aunque esté activado *Restringir toda la web*) con el formulario por pasos de las tres hojas de papel: **alumnos** (varios hermanos a la vez; el curso se propone solo por el año de nacimiento), **padres o tutores**, **residencia y familia** (convivientes, hermanos en el centro, padres separados que necesitan dos cuentas), **datos económicos SEPA** (o pago por ventanilla), **información y autorizaciones** y envío.
+- Paso *Información y autorizaciones*: la hoja **«Información del centro a la familia»** (apartados A–G), las **manifestaciones de los padres/tutores** (1º, 2º y 5º se aceptan; 3º actividades complementarias y 4º imágenes se eligen *sí/no*; 6º otras manifestaciones, texto libre) y la **información de protección de datos** de la Fundación con sus casillas *Consiento / No consiento* (publicación de imágenes y cesión al AMPA). Lo que marcan se imprime en Secretaría en las hojas para firmar.
 - Se comprueban la letra del **DNI/NIE**, los dígitos de control del **IBAN**, fechas, teléfonos y códigos postales (en el navegador y otra vez en el servidor). Funciona también sin JavaScript.
 - La familia **confirma su correo con un código de 6 números** (caduca en una hora; 5 intentos; se puede pedir otro). Hay un campo trampa contra robots y un límite de envíos por conexión.
 - Al confirmar, la solicitud se envía al **Área de Profesores** (pestaña *Nuevas familias*), que la guarda cifrada y avisa a Secretaría, Dirección y Administración y a la familia. **En esta web no se guarda nada** una vez enviada.
 - En el navegador de la familia se guarda un borrador por si cierran la página (sin números de documento ni IBAN); se borra al terminar.
-- Ajustes: página del formulario, plazo abierto o cerrado, curso escolar (uno o varios), cursos que se pueden pedir, textos, enlace al Ideario y texto de protección de datos (**es un texto de ejemplo: que lo revise el delegado de protección de datos del colegio**).
-- Requiere el Área de Profesores 1.26.0 o posterior.
+- Ajustes: página del formulario, plazo abierto o cerrado, curso escolar (uno o varios), cursos que se pueden pedir, textos, enlace al Proyecto Educativo y al RRI, y los textos de **información del centro** y de **protección de datos** (transcritos de las hojas en papel; se pueden editar: `## ` título, `- ` lista, `**negrita**`; las líneas `[CONSENTIMIENTO_IMAGENES]` y `[CONSENTIMIENTO_AMPA]` son las casillas). Con cada solicitud se envía el texto exacto que la familia ha aceptado.
+- Requiere el Área de Profesores 1.26.1 o posterior.
 
 ## Instalación
 
